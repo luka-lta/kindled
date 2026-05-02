@@ -6,14 +6,29 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A07078A92FA60447009298AF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		A0A7F8CE2FA54E3F00BCE594 /* habbit-tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "habbit-tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A07078942FA60446009298AF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		A07078962FA60446009298AF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Kindled.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A0A7F8D02FA54E3F00BCE594 /* habbit-tracker */ = {
+		A0A7F8D02FA54E3F00BCE594 /* Kindled */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "habbit-tracker";
+			path = Kindled;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -29,10 +44,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A07078932FA60446009298AF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A07078942FA60446009298AF /* WidgetKit.framework */,
+				A07078962FA60446009298AF /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A0A7F8C52FA54E3F00BCE594 = {
 			isa = PBXGroup;
 			children = (
-				A0A7F8D02FA54E3F00BCE594 /* habbit-tracker */,
+				A0A7F8D02FA54E3F00BCE594 /* Kindled */,
+				A07078932FA60446009298AF /* Frameworks */,
 				A0A7F8CF2FA54E3F00BCE594 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,7 +65,7 @@
 		A0A7F8CF2FA54E3F00BCE594 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A0A7F8CE2FA54E3F00BCE594 /* habbit-tracker.app */,
+				A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,26 +73,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A0A7F8CD2FA54E3F00BCE594 /* habbit-tracker */ = {
+		A0A7F8CD2FA54E3F00BCE594 /* Kindled */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A0A7F8D92FA54E4100BCE594 /* Build configuration list for PBXNativeTarget "habbit-tracker" */;
+			buildConfigurationList = A0A7F8D92FA54E4100BCE594 /* Build configuration list for PBXNativeTarget "Kindled" */;
 			buildPhases = (
 				A0A7F8CA2FA54E3F00BCE594 /* Sources */,
 				A0A7F8CB2FA54E3F00BCE594 /* Frameworks */,
 				A0A7F8CC2FA54E3F00BCE594 /* Resources */,
+				A07078A92FA60447009298AF /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A0A7F8D02FA54E3F00BCE594 /* habbit-tracker */,
+				A0A7F8D02FA54E3F00BCE594 /* Kindled */,
 			);
-			name = "habbit-tracker";
+			name = Kindled;
 			packageProductDependencies = (
 			);
-			productName = "habbit-tracker";
-			productReference = A0A7F8CE2FA54E3F00BCE594 /* habbit-tracker.app */;
+			productName = Kindled;
+			productReference = A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +125,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A0A7F8CD2FA54E3F00BCE594 /* habbit-tracker */,
+				A0A7F8CD2FA54E3F00BCE594 /* Kindled */,
 			);
 		};
 /* End PBXProject section */
@@ -251,6 +277,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 74233Z9998;
@@ -266,15 +293,20 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.habbit-tracker";
+				INFOPLIST_KEY_CFBundleDisplayName = Kindled;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -283,6 +315,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 74233Z9998;
@@ -298,22 +331,27 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.habbit-tracker";
+				INFOPLIST_KEY_CFBundleDisplayName = Kindled;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A0A7F8C92FA54E3F00BCE594 /* Build configuration list for PBXProject "habbit-tracker" */ = {
+		A0A7F8C92FA54E3F00BCE594 /* Build configuration list for PBXProject "Kindled" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A0A7F8D72FA54E4100BCE594 /* Debug */,
@@ -322,7 +360,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A0A7F8D92FA54E4100BCE594 /* Build configuration list for PBXNativeTarget "habbit-tracker" */ = {
+		A0A7F8D92FA54E4100BCE594 /* Build configuration list for PBXNativeTarget "Kindled" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A0A7F8DA2FA54E4100BCE594 /* Debug */,
