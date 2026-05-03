@@ -11,6 +11,12 @@ struct HomeView: View {
     @State private var editHabit: Habit? = nil
     @State private var confettiFireID: UUID? = nil
     @State private var pendingNoteEntry: HabitEntry? = nil
+    @State private var selectedCategory: HabitCategory? = nil
+
+    private var filteredHabits: [Habit] {
+        guard let category = selectedCategory else { return habits }
+        return habits.filter { $0.category == category }
+    }
 
     private var todayProgress: Double {
         guard !habits.isEmpty else { return 0 }
@@ -25,12 +31,21 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
                     .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 4, trailing: 20))
 
+                categoryFilterBar
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
+
                 if habits.isEmpty {
                     emptyState
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
+                } else if filteredHabits.isEmpty {
+                    filteredEmptyState
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                 } else {
-                    ForEach(habits) { habit in
+                    ForEach(filteredHabits) { habit in
                         NavigationLink(destination: HabitDetailView(habit: habit)) {
                             HabitCard(habit: habit) {
                                 toggleHabit(habit)
@@ -48,7 +63,7 @@ struct HomeView: View {
                             }
                         }
                     }
-                    .onMove(perform: moveHabits)
+                    .onMove(perform: moveHabitsIfUnfiltered)
                     .onDelete(perform: deleteHabits)
                 }
             }
@@ -59,11 +74,13 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    if !habits.isEmpty {
-                        EditButton()
-                            .foregroundStyle(themeColor)
-                    }
+                    EditButton()
+                        .foregroundStyle(themeColor)
+                        .opacity(habits.isEmpty ? 0 : 1)
+                        .disabled(habits.isEmpty)
                 }
+            }
+            .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showAddHabit = true
@@ -119,6 +136,25 @@ struct HomeView: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
     }
 
+    private var categoryFilterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                CategoryChip(label: "All", icon: "square.grid.2x2.fill", color: themeColor, isSelected: selectedCategory == nil) {
+                    withAnimation(.easeInOut(duration: 0.2)) { selectedCategory = nil }
+                }
+                ForEach(HabitCategory.allCases, id: \.self) { category in
+                    CategoryChip(label: category.rawValue, icon: category.icon, color: category.color, isSelected: selectedCategory == category) {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            selectedCategory = selectedCategory == category ? nil : category
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 4)
+        }
+    }
+
     private var emptyState: some View {
         VStack(spacing: 16) {
             Image(systemName: "checkmark.circle.badge.plus")
@@ -132,6 +168,19 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 64)
+    }
+
+    private var filteredEmptyState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "line.3.horizontal.decrease.circle")
+                .font(.system(size: 48))
+                .foregroundStyle(.secondary.opacity(0.5))
+            Text("No habits in this category")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 48)
     }
 
     private var greeting: String {
@@ -170,6 +219,11 @@ struct HomeView: View {
         }
     }
 
+    private func moveHabitsIfUnfiltered(from source: IndexSet, to destination: Int) {
+        guard selectedCategory == nil else { return }
+        moveHabits(from: source, to: destination)
+    }
+
     private func moveHabits(from source: IndexSet, to destination: Int) {
         var reordered = habits
         reordered.move(fromOffsets: source, toOffset: destination)
@@ -180,7 +234,7 @@ struct HomeView: View {
 
     private func deleteHabits(at offsets: IndexSet) {
         for index in offsets {
-            let habit = habits[index]
+            let habit = filteredHabits[index]
             NotificationManager.shared.removeAllReminders(for: habit)
             modelContext.delete(habit)
         }
@@ -189,5 +243,29 @@ struct HomeView: View {
     private func deleteHabit(_ habit: Habit) {
         NotificationManager.shared.removeAllReminders(for: habit)
         modelContext.delete(habit)
+    }
+}
+
+private struct CategoryChip: View {
+    let label: String
+    let icon: String
+    let color: Color
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 5) {
+                Image(systemName: icon)
+                    .font(.caption)
+                Text(label)
+                    .font(.caption.weight(.medium))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(isSelected ? color : Color(.secondarySystemGroupedBackground), in: Capsule())
+            .foregroundStyle(isSelected ? .white : .primary)
+        }
+        .buttonStyle(.plain)
     }
 }
