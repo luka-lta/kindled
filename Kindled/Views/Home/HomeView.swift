@@ -7,11 +7,14 @@ struct HomeView: View {
     @Query(sort: \Habit.sortOrder) var habits: [Habit]
     @Environment(\.modelContext) var modelContext
     @Environment(\.themeColor) var themeColor
+    @Environment(AchievementManager.self) var achievementManager
     @State private var showAddHabit = false
     @State private var editHabit: Habit? = nil
     @State private var confettiFireID: UUID? = nil
     @State private var pendingNoteEntry: HabitEntry? = nil
     @State private var selectedCategory: HabitCategory? = nil
+    @State private var achievementQueue: [Achievement] = []
+    @State private var visibleAchievement: Achievement? = nil
 
     private var filteredHabits: [Habit] {
         guard let category = selectedCategory else { return habits }
@@ -101,6 +104,16 @@ struct HomeView: View {
                 NoteEntryView(entry: entry)
             }
             .overlay { ConfettiOverlay(fireID: confettiFireID) }
+            .overlay(alignment: .top) {
+                if let achievement = visibleAchievement {
+                    AchievementBanner(achievement: achievement) {
+                        dismissBanner()
+                    }
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .padding(.top, 8)
+                    .zIndex(10)
+                }
+            }
         }
     }
 
@@ -216,6 +229,32 @@ struct HomeView: View {
 
         if streakMilestones.contains(habit.currentStreak) {
             confettiFireID = UUID()
+        }
+
+        let newAchievements = achievementManager.check(habits: habits)
+        if !newAchievements.isEmpty {
+            achievementQueue.append(contentsOf: newAchievements)
+            showNextBanner()
+        }
+    }
+
+    private func showNextBanner() {
+        guard visibleAchievement == nil, let next = achievementQueue.first else { return }
+        achievementQueue.removeFirst()
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+            visibleAchievement = next
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            dismissBanner()
+        }
+    }
+
+    private func dismissBanner() {
+        withAnimation(.easeOut(duration: 0.3)) {
+            visibleAchievement = nil
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            showNextBanner()
         }
     }
 

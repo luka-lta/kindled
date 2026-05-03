@@ -12,6 +12,7 @@ struct ContentView: View {
     @AppStorage("appAppearance") private var appearanceRaw: String = "System"
     @AppStorage("appTheme") private var themeRaw: String = "Purple"
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    @State private var achievementManager = AchievementManager()
 
     private var preferredColorScheme: ColorScheme? {
         switch appearanceRaw {
@@ -35,6 +36,12 @@ struct ContentView: View {
                 .tabItem {
                     Label("Stats", systemImage: "chart.bar.fill")
                 }
+            NavigationStack {
+                AchievementsView()
+            }
+            .tabItem {
+                Label("Achievements", systemImage: "trophy.fill")
+            }
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
@@ -42,6 +49,7 @@ struct ContentView: View {
         }
         .tint(activeThemeColor)
         .environment(\.themeColor, activeThemeColor)
+        .environment(achievementManager)
         .preferredColorScheme(preferredColorScheme)
         .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {
             OnboardingView()
