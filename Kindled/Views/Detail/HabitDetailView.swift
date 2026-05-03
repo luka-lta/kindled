@@ -17,6 +17,7 @@ struct HabitDetailView: View {
                     HabitChartsView(habit: habit)
                     HeatmapView(habit: habit)
                     CalendarGridView(habit: habit)
+                    NotesOverviewView(habit: habit)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 24)
