@@ -7,8 +7,14 @@ struct SettingsView: View {
     @AppStorage("hapticEnabled") private var hapticStored = true
     @AppStorage("appAppearance") private var appearanceRaw: String = "System"
     @AppStorage("appTheme") private var themeRaw: String = "Purple"
+    @AppStorage("appLanguage") private var appLanguage: String = "system"
 
     private let appearanceOptions = ["System", "Light", "Dark"]
+    private let languageOptions: [(id: String, label: String)] = [
+        ("system", "System"),
+        ("en", "English"),
+        ("de", "Deutsch"),
+    ]
 
     var body: some View {
         NavigationStack {
@@ -123,6 +129,21 @@ struct SettingsView: View {
                 }
                 .pickerStyle(.segmented)
             }
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Language")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                Picker("Language", selection: $appLanguage) {
+                    ForEach(languageOptions, id: \.id) { option in
+                        Text(verbatim: option.label).tag(option.id)
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
         }
         .padding(20)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
@@ -186,7 +207,7 @@ struct SettingsView: View {
                     icon: "waveform",
                     iconColor: .pink,
                     title: "Haptic Feedback",
-                    subtitle: String(localized: "Vibrate on habit completion")
+                    subtitle: "Vibrate on habit completion"
                 )
                 Spacer()
                 Toggle("", isOn: $hapticStored)
@@ -242,7 +263,7 @@ struct SettingsView: View {
     }
 
     @ViewBuilder
-    private func settingRow(icon: String, iconColor: Color, title: String, subtitle: String?) -> some View {
+    private func settingRow(icon: String, iconColor: Color, title: String, subtitle: LocalizedStringKey?) -> some View {
         HStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
@@ -256,7 +277,7 @@ struct SettingsView: View {
                 Text(LocalizedStringKey(title))
                     .font(.subheadline)
                 if let subtitle {
-                    Text(verbatim: subtitle)
+                    Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -264,11 +285,11 @@ struct SettingsView: View {
         }
     }
 
-    private var notificationStatusDescription: String {
+    private var notificationStatusDescription: LocalizedStringKey {
         switch notificationStatus {
-        case .authorized: return String(localized: "Reminders will arrive on time")
-        case .denied:     return String(localized: "Enable in System Settings")
-        default:          return String(localized: "Not configured yet")
+        case .authorized: return "Reminders will arrive on time"
+        case .denied:     return "Enable in System Settings"
+        default:          return "Not configured yet"
         }
     }
 

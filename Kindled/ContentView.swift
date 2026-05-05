@@ -11,8 +11,13 @@ import SwiftData
 struct ContentView: View {
     @AppStorage("appAppearance") private var appearanceRaw: String = "System"
     @AppStorage("appTheme") private var themeRaw: String = "Purple"
+    @AppStorage("appLanguage") private var appLanguage: String = "system"
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var achievementManager = AchievementManager()
+
+    private var appLocale: Locale {
+        appLanguage == "system" ? Locale.current : Locale(identifier: appLanguage)
+    }
 
     private var preferredColorScheme: ColorScheme? {
         switch appearanceRaw {
@@ -49,6 +54,7 @@ struct ContentView: View {
         }
         .tint(activeThemeColor)
         .environment(\.themeColor, activeThemeColor)
+        .environment(\.locale, appLocale)
         .environment(achievementManager)
         .preferredColorScheme(preferredColorScheme)
         .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {

@@ -196,12 +196,12 @@ struct HomeView: View {
         .padding(.top, 48)
     }
 
-    private var greeting: String {
+    private var greeting: LocalizedStringKey {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 0..<12: return String(localized: "Good Morning")
-        case 12..<17: return String(localized: "Good Afternoon")
-        default:      return String(localized: "Good Evening")
+        case 0..<12: return "Good Morning"
+        case 12..<17: return "Good Afternoon"
+        default:      return "Good Evening"
         }
     }
 
