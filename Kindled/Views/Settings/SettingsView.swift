@@ -91,11 +91,13 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Color Theme")
                             .font(.subheadline)
+                            .foregroundStyle(.primary)
                         Text(LocalizedStringKey(themeRaw))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
+                .foregroundStyle(.primary)
             }
 
             Divider()
@@ -113,11 +115,13 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("App Appearance")
                             .font(.subheadline)
+                            .foregroundStyle(.primary)
                         Text(LocalizedStringKey(appearanceRaw))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
+                .foregroundStyle(.primary)
             }
 
             Divider()
@@ -135,11 +139,13 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Language")
                             .font(.subheadline)
+                            .foregroundStyle(.primary)
                         Text(verbatim: currentLanguageLabel)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
+                .foregroundStyle(.primary)
             }
         }
         .padding(20)
