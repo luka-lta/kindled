@@ -78,42 +78,22 @@ struct SettingsView: View {
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Color Theme")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 16) {
-                    ForEach(AppTheme.allCases, id: \.rawValue) { theme in
-                        Button {
-                            withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
-                                themeRaw = theme.rawValue
-                            }
-                        } label: {
-                            VStack(spacing: 6) {
-                                ZStack {
-                                    Circle()
-                                        .fill(theme.color)
-                                        .frame(width: 48, height: 48)
-                                        .shadow(
-                                            color: theme.color.opacity(themeRaw == theme.rawValue ? 0.5 : 0),
-                                            radius: 6, y: 3
-                                        )
-                                    if themeRaw == theme.rawValue {
-                                        Image(systemName: "checkmark")
-                                            .font(.system(size: 16, weight: .bold))
-                                            .foregroundStyle(.white)
-                                    }
-                                }
-                                Text(LocalizedStringKey(theme.rawValue))
-                                    .font(.caption2)
-                                    .foregroundStyle(themeRaw == theme.rawValue ? theme.color : .secondary)
-                                    .bold(themeRaw == theme.rawValue)
-                            }
-                        }
-                        .buttonStyle(.plain)
-                        .scaleEffect(themeRaw == theme.rawValue ? 1.1 : 1.0)
-                        .animation(.spring(response: 0.2, dampingFraction: 0.6), value: themeRaw)
+            NavigationLink(destination: ThemePickerView()) {
+                HStack(spacing: 12) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(themeColor)
+                            .frame(width: 32, height: 32)
+                        Image(systemName: "paintpalette.fill")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Color Theme")
+                            .font(.subheadline)
+                        Text(LocalizedStringKey(themeRaw))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
