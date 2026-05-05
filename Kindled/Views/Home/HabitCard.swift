@@ -61,13 +61,13 @@ struct HabitCard: View {
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 }
-                Text(habit.frequency.rawValue)
+                Text(LocalizedStringKey(habit.frequency.rawValue))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text("·")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
-                Label(habit.category.rawValue, systemImage: habit.category.icon)
+                Label(LocalizedStringKey(habit.category.rawValue), systemImage: habit.category.icon)
                     .font(.caption)
                     .foregroundStyle(habit.category.color.opacity(0.8))
             }

@@ -14,6 +14,8 @@
 "%lld of %lld done" = "%lld of %lld done";
 "Last 14 days · %lld habits" = "Last 14 days · %lld habits";
 "%lld / 14 completed" = "%lld / 14 completed";
+"%lld completions" = "%lld completions";
+"%lld of %lld unlocked" = "%lld of %lld unlocked";
 
 /* Habit actions */
 "New Habit" = "New Habit";
@@ -47,6 +49,7 @@
 "How did it go? (optional)" = "How did it go? (optional)";
 
 /* Statistics */
+"Stats" = "Stats";
 "Statistics" = "Statistics";
 "Streak Leaderboard" = "Streak Leaderboard";
 "No data yet" = "No data yet";
@@ -99,6 +102,7 @@
 "3 habits with a streak of 7+" = "3 habits with a streak of 7+";
 
 /* Settings */
+"On" = "On";
 "Language" = "Language";
 "Settings" = "Settings";
 "Personalization" = "Personalization";

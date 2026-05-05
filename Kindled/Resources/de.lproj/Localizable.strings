@@ -14,6 +14,8 @@
 "%lld of %lld done" = "%lld von %lld erledigt";
 "Last 14 days · %lld habits" = "Letzte 14 Tage · %lld Gewohnheiten";
 "%lld / 14 completed" = "%lld / 14 abgeschlossen";
+"%lld completions" = "%lld Abschlüsse";
+"%lld of %lld unlocked" = "%lld von %lld freigeschaltet";
 
 /* Habit actions */
 "New Habit" = "Neue Gewohnheit";
@@ -47,6 +49,7 @@
 "How did it go? (optional)" = "Wie lief es? (optional)";
 
 /* Statistics */
+"Stats" = "Statistiken";
 "Statistics" = "Statistiken";
 "Streak Leaderboard" = "Streak-Bestenliste";
 "No data yet" = "Noch keine Daten";
@@ -99,6 +102,7 @@
 "3 habits with a streak of 7+" = "3 Gewohnheiten mit Streak von 7+";
 
 /* Settings */
+"On" = "Ein";
 "Language" = "Sprache";
 "Settings" = "Einstellungen";
 "Personalization" = "Personalisierung";

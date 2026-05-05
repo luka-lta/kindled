@@ -156,7 +156,7 @@ struct HomeView: View {
                     withAnimation(.easeInOut(duration: 0.2)) { selectedCategory = nil }
                 }
                 ForEach(HabitCategory.allCases, id: \.self) { category in
-                    CategoryChip(label: String(localized: LocalizedStringKey(category.rawValue)), icon: category.icon, color: category.color, isSelected: selectedCategory == category) {
+                    CategoryChip(label: String(localized: .init(category.rawValue)), icon: category.icon, color: category.color, isSelected: selectedCategory == category) {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             selectedCategory = selectedCategory == category ? nil : category
                         }
