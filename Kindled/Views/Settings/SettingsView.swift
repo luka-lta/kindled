@@ -10,11 +10,14 @@ struct SettingsView: View {
     @AppStorage("appLanguage") private var appLanguage: String = "system"
 
     private let appearanceOptions = ["System", "Light", "Dark"]
-    private let languageOptions: [(id: String, label: String)] = [
-        ("system", "System"),
-        ("en", "English"),
-        ("de", "Deutsch"),
-    ]
+
+    private var currentLanguageLabel: String {
+        switch appLanguage {
+        case "en": return "🇬🇧 English"
+        case "de": return "🇩🇪 Deutsch"
+        default:   return "⚙️ System"
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -132,17 +135,24 @@ struct SettingsView: View {
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Language")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                Picker("Language", selection: $appLanguage) {
-                    ForEach(languageOptions, id: \.id) { option in
-                        Text(verbatim: option.label).tag(option.id)
+            NavigationLink(destination: LanguagePickerView()) {
+                HStack(spacing: 12) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(themeColor)
+                            .frame(width: 32, height: 32)
+                        Image(systemName: "globe")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Language")
+                            .font(.subheadline)
+                        Text(verbatim: currentLanguageLabel)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                .pickerStyle(.segmented)
             }
         }
         .padding(20)
