@@ -9,8 +9,6 @@ struct SettingsView: View {
     @AppStorage("appTheme") private var themeRaw: String = "Purple"
     @AppStorage("appLanguage") private var appLanguage: String = "system"
 
-    private let appearanceOptions = ["System", "Light", "Dark"]
-
     private var currentLanguageLabel: String {
         switch appLanguage {
         case "en": return "🇬🇧 English"
@@ -122,15 +120,24 @@ struct SettingsView: View {
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 10) {
-                Text("App Appearance")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                Picker("Appearance", selection: $appearanceRaw) {
-                    ForEach(appearanceOptions, id: \.self) { Text(LocalizedStringKey($0)).tag($0) }
+            NavigationLink(destination: AppearancePickerView()) {
+                HStack(spacing: 12) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.indigo)
+                            .frame(width: 32, height: 32)
+                        Image(systemName: "moon.fill")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("App Appearance")
+                            .font(.subheadline)
+                        Text(LocalizedStringKey(appearanceRaw))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
-                .pickerStyle(.segmented)
             }
 
             Divider()
