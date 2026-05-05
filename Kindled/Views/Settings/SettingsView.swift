@@ -74,79 +74,43 @@ struct SettingsView: View {
 
     private var personalizationCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            cardHeader(title: "Personalization", icon: "paintbrush.fill", color: themeColor)
+            cardHeader(title: "Personalization", icon: "paintbrush.fill", color: .green)
 
             Divider()
 
             NavigationLink(destination: ThemePickerView()) {
-                HStack(spacing: 12) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(themeColor)
-                            .frame(width: 32, height: 32)
-                        Image(systemName: "paintpalette.fill")
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Color Theme")
-                            .font(.subheadline)
-                            .foregroundStyle(.primary)
-                        Text(LocalizedStringKey(themeRaw))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
+                settingsNavRow(
+                    icon: "paintpalette.fill",
+                    iconColor: .purple,
+                    title: "Color Theme",
+                    subtitle: Text(LocalizedStringKey(themeRaw))
+                )
             }
+            .foregroundStyle(.primary)
 
             Divider()
 
             NavigationLink(destination: AppearancePickerView()) {
-                HStack(spacing: 12) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.indigo)
-                            .frame(width: 32, height: 32)
-                        Image(systemName: "moon.fill")
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("App Appearance")
-                            .font(.subheadline)
-                            .foregroundStyle(.primary)
-                        Text(LocalizedStringKey(appearanceRaw))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
+                settingsNavRow(
+                    icon: "moon.fill",
+                    iconColor: .indigo,
+                    title: "App Appearance",
+                    subtitle: Text(LocalizedStringKey(appearanceRaw))
+                )
             }
+            .foregroundStyle(.primary)
 
             Divider()
 
             NavigationLink(destination: LanguagePickerView()) {
-                HStack(spacing: 12) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(themeColor)
-                            .frame(width: 32, height: 32)
-                        Image(systemName: "globe")
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Language")
-                            .font(.subheadline)
-                            .foregroundStyle(.primary)
-                        Text(verbatim: currentLanguageLabel)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
+                settingsNavRow(
+                    icon: "globe",
+                    iconColor: .teal,
+                    title: "Language",
+                    subtitle: Text(verbatim: currentLanguageLabel)
+                )
             }
+            .foregroundStyle(.primary)
         }
         .padding(20)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
@@ -238,7 +202,7 @@ struct SettingsView: View {
                     subtitle: nil
                 )
                 Spacer()
-                Text("1.0.0")
+                Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -286,6 +250,32 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func settingsNavRow(icon: String, iconColor: Color, title: String, subtitle: Text) -> some View {
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(iconColor)
+                    .frame(width: 32, height: 32)
+                Image(systemName: icon)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(LocalizedStringKey(title))
+                    .font(.subheadline)
+                subtitle
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption.bold())
+                .foregroundStyle(.tertiary)
+        }
+        .contentShape(Rectangle())
     }
 
     private var notificationStatusDescription: LocalizedStringKey {
