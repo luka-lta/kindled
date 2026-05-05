@@ -2,9 +2,9 @@ import SwiftUI
 
 struct OnboardingPage {
     let icon: String
-    let title: String
-    let subtitle: String
-    let features: [String]
+    let title: LocalizedStringKey
+    let subtitle: LocalizedStringKey
+    let features: [LocalizedStringKey]
     let gradient: [Color]
 }
 
@@ -83,7 +83,7 @@ struct OnboardingView: View {
             }
         } label: {
             HStack(spacing: 8) {
-                Text(isLast ? "Get Started" : "Next")
+                Text(isLast ? LocalizedStringKey("Get Started") : "Next")
                     .font(.system(size: 17, weight: .bold))
                 if !isLast {
                     Image(systemName: "arrow.right")

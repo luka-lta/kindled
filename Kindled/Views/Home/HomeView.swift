@@ -152,11 +152,11 @@ struct HomeView: View {
     private var categoryFilterBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                CategoryChip(label: "All", icon: "square.grid.2x2.fill", color: themeColor, isSelected: selectedCategory == nil) {
+                CategoryChip(label: String(localized: "All"), icon: "square.grid.2x2.fill", color: themeColor, isSelected: selectedCategory == nil) {
                     withAnimation(.easeInOut(duration: 0.2)) { selectedCategory = nil }
                 }
                 ForEach(HabitCategory.allCases, id: \.self) { category in
-                    CategoryChip(label: category.rawValue, icon: category.icon, color: category.color, isSelected: selectedCategory == category) {
+                    CategoryChip(label: String(localized: LocalizedStringKey(category.rawValue)), icon: category.icon, color: category.color, isSelected: selectedCategory == category) {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             selectedCategory = selectedCategory == category ? nil : category
                         }
@@ -199,9 +199,9 @@ struct HomeView: View {
     private var greeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 0..<12: return "Good Morning"
-        case 12..<17: return "Good Afternoon"
-        default:      return "Good Evening"
+        case 0..<12: return String(localized: "Good Morning")
+        case 12..<17: return String(localized: "Good Afternoon")
+        default:      return String(localized: "Good Evening")
         }
     }
 

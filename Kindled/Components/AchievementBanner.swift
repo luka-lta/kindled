@@ -18,7 +18,7 @@ struct AchievementBanner: View {
                 Text("Achievement Unlocked!")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
-                Text(achievement.title)
+                Text(LocalizedStringKey(achievement.title))
                     .font(.subheadline.bold())
             }
             Spacer()

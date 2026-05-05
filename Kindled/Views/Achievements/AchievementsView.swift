@@ -62,11 +62,11 @@ private struct AchievementCard: View {
                     .foregroundStyle(unlocked ? .white : .secondary)
             }
             VStack(spacing: 3) {
-                Text(achievement.title)
+                Text(LocalizedStringKey(achievement.title))
                     .font(.caption.bold())
                     .multilineTextAlignment(.center)
                     .foregroundStyle(unlocked ? .primary : .secondary)
-                Text(achievement.description)
+                Text(LocalizedStringKey(achievement.description))
                     .font(.caption2)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)

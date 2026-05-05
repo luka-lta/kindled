@@ -1,0 +1,160 @@
+/* Greetings */
+"Good Morning" = "Guten Morgen";
+"Good Afternoon" = "Guten Tag";
+"Good Evening" = "Guten Abend";
+
+/* Home */
+"No habits yet" = "Noch keine Gewohnheiten";
+"Tap + to add your first habit" = "Tippe auf +, um deine erste Gewohnheit hinzuzufügen";
+"No habits in this category" = "Keine Gewohnheiten in dieser Kategorie";
+"today" = "heute";
+"All" = "Alle";
+
+/* Interpolated counts */
+"%lld of %lld done" = "%lld von %lld erledigt";
+"Last 14 days · %lld habits" = "Letzte 14 Tage · %lld Gewohnheiten";
+"%lld / 14 completed" = "%lld / 14 abgeschlossen";
+
+/* Habit actions */
+"New Habit" = "Neue Gewohnheit";
+"Edit Habit" = "Gewohnheit bearbeiten";
+"Habit Name" = "Name der Gewohnheit";
+"e.g. Morning Run" = "z.B. Morgenrunde";
+"Cancel" = "Abbrechen";
+"Save" = "Speichern";
+"Skip" = "Überspringen";
+"Done" = "Fertig";
+"Edit" = "Bearbeiten";
+"Delete" = "Löschen";
+"Next" = "Weiter";
+"Get Started" = "Loslegen";
+"Off" = "Aus";
+"Daily Reminder" = "Tägliche Erinnerung";
+
+/* Card section headers */
+"Name" = "Name";
+"Category" = "Kategorie";
+"Customize" = "Anpassen";
+"Color" = "Farbe";
+"Icon" = "Symbol";
+"Schedule" = "Zeitplan";
+"Frequency" = "Häufigkeit";
+
+/* Notes */
+"Notes" = "Notizen";
+"Add Note" = "Notiz hinzufügen";
+"No notes yet" = "Noch keine Notizen";
+"How did it go? (optional)" = "Wie lief es? (optional)";
+
+/* Statistics */
+"Statistics" = "Statistiken";
+"Streak Leaderboard" = "Streak-Bestenliste";
+"No data yet" = "Noch keine Daten";
+"Start tracking habits to see your stats" = "Beginne Gewohnheiten zu tracken, um Statistiken zu sehen";
+"Daily Completions" = "Tägliche Abschlüsse";
+"Completion Trend" = "Abschluss-Trend";
+"Average across all habits · 12 weeks" = "Durchschnitt aller Gewohnheiten · 12 Wochen";
+"Last 14 Days" = "Letzte 14 Tage";
+"12-Week Trend" = "12-Wochen-Trend";
+"today" = "heute";
+"avg" = "Ø";
+"Habits" = "Gewohnheiten";
+"This Month" = "Diesen Monat";
+"Avg Rate" = "Ø Rate";
+"Streak" = "Streak";
+"Best" = "Bestes";
+"Total" = "Gesamt";
+"Rate" = "Rate";
+
+/* Achievements */
+"Achievements" = "Erfolge";
+"Achievement Unlocked!" = "Erfolg freigeschaltet!";
+
+/* Achievement titles */
+"First Flame" = "Erste Flamme";
+"Week Warrior" = "Wochen-Krieger";
+"Month Master" = "Monats-Meister";
+"Century Club" = "Jahrhundert-Club";
+"Dedicated" = "Engagiert";
+"Committed" = "Zielstrebig";
+"Veteran" = "Veteran";
+"Habit Collector" = "Gewohnheits-Sammler";
+"Explorer" = "Entdecker";
+"Perfect Day" = "Perfekter Tag";
+"Category Explorer" = "Kategorie-Entdecker";
+"On Fire" = "In Flammen";
+
+/* Achievement descriptions */
+"Complete your first habit" = "Schließe deine erste Gewohnheit ab";
+"Reach a 7-day streak" = "Erreiche einen 7-Tage-Streak";
+"Reach a 30-day streak" = "Erreiche einen 30-Tage-Streak";
+"Reach a 100-day streak" = "Erreiche einen 100-Tage-Streak";
+"25 total completions" = "25 Abschlüsse insgesamt";
+"100 total completions" = "100 Abschlüsse insgesamt";
+"500 total completions" = "500 Abschlüsse insgesamt";
+"Track 3 habits at once" = "Tracke gleichzeitig 3 Gewohnheiten";
+"Track 5 habits at once" = "Tracke gleichzeitig 5 Gewohnheiten";
+"Complete all habits in one day" = "Schließe alle Gewohnheiten an einem Tag ab";
+"Have habits in 3 different categories" = "Gewohnheiten in 3 verschiedenen Kategorien";
+"3 habits with a streak of 7+" = "3 Gewohnheiten mit Streak von 7+";
+
+/* Settings */
+"Settings" = "Einstellungen";
+"Personalization" = "Personalisierung";
+"Color Theme" = "Farbschema";
+"App Appearance" = "App-Design";
+"Appearance" = "Erscheinungsbild";
+"Notifications" = "Benachrichtigungen";
+"Permission Status" = "Berechtigungsstatus";
+"Open System Settings" = "Systemeinstellungen öffnen";
+"Haptic Feedback" = "Haptisches Feedback";
+"Vibrate on habit completion" = "Vibration bei Abschluss";
+"Preferences" = "Einstellungen";
+"About" = "Über";
+"Version" = "Version";
+"Reminders will arrive on time" = "Erinnerungen kommen pünktlich";
+"Enable in System Settings" = "In Systemeinstellungen aktivieren";
+"Not configured yet" = "Noch nicht konfiguriert";
+
+/* Categories */
+"Health" = "Gesundheit";
+"Mind" = "Geist";
+"Lifestyle" = "Lebensstil";
+"Finance" = "Finanzen";
+"Social" = "Soziales";
+
+/* Frequency */
+"Daily" = "Täglich";
+"Weekly" = "Wöchentlich";
+
+/* Themes / Appearance */
+"Purple" = "Lila";
+"Blue" = "Blau";
+"Green" = "Grün";
+"Orange" = "Orange";
+"Pink" = "Pink";
+"Red" = "Rot";
+"Teal" = "Petrol";
+"Indigo" = "Indigo";
+"System" = "System";
+"Light" = "Hell";
+"Dark" = "Dunkel";
+
+/* Onboarding */
+"Habit Tracker" = "Gewohnheits-Tracker";
+"Build better habits, daily" = "Bessere Gewohnheiten, täglich";
+"Build Better Habits" = "Bessere Gewohnheiten aufbauen";
+"Small daily actions compound into extraordinary results over time." = "Kleine tägliche Aktionen summieren sich zu außergewöhnlichen Ergebnissen.";
+"Track any habit" = "Tracke jede Gewohnheit";
+"Daily reminders" = "Tägliche Erinnerungen";
+"Beautiful progress" = "Schöner Fortschritt";
+"Build Your Streak" = "Deinen Streak aufbauen";
+"Complete habits daily to grow your streak. Consistency is everything." = "Schließe Gewohnheiten täglich ab. Beständigkeit ist alles.";
+"See Your Progress" = "Deinen Fortschritt sehen";
+"Year-at-a-glance heatmap, stats, and streak leaderboard keep you motivated." = "Jahres-Heatmap, Statistiken und Bestenliste halten dich motiviert.";
+"Yearly heatmap" = "Jahres-Heatmap";
+"Completion stats" = "Abschluss-Statistiken";
+"Confetti milestones 🎉" = "Konfetti-Meilensteine 🎉";
+
+/* Streak pill */
+"%lld day streak" = "%lld-Tage-Streak";

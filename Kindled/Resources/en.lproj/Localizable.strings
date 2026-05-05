@@ -1,0 +1,160 @@
+/* Greetings */
+"Good Morning" = "Good Morning";
+"Good Afternoon" = "Good Afternoon";
+"Good Evening" = "Good Evening";
+
+/* Home */
+"No habits yet" = "No habits yet";
+"Tap + to add your first habit" = "Tap + to add your first habit";
+"No habits in this category" = "No habits in this category";
+"today" = "today";
+"All" = "All";
+
+/* Interpolated counts */
+"%lld of %lld done" = "%lld of %lld done";
+"Last 14 days · %lld habits" = "Last 14 days · %lld habits";
+"%lld / 14 completed" = "%lld / 14 completed";
+
+/* Habit actions */
+"New Habit" = "New Habit";
+"Edit Habit" = "Edit Habit";
+"Habit Name" = "Habit Name";
+"e.g. Morning Run" = "e.g. Morning Run";
+"Cancel" = "Cancel";
+"Save" = "Save";
+"Skip" = "Skip";
+"Done" = "Done";
+"Edit" = "Edit";
+"Delete" = "Delete";
+"Next" = "Next";
+"Get Started" = "Get Started";
+"Off" = "Off";
+"Daily Reminder" = "Daily Reminder";
+
+/* Card section headers */
+"Name" = "Name";
+"Category" = "Category";
+"Customize" = "Customize";
+"Color" = "Color";
+"Icon" = "Icon";
+"Schedule" = "Schedule";
+"Frequency" = "Frequency";
+
+/* Notes */
+"Notes" = "Notes";
+"Add Note" = "Add Note";
+"No notes yet" = "No notes yet";
+"How did it go? (optional)" = "How did it go? (optional)";
+
+/* Statistics */
+"Statistics" = "Statistics";
+"Streak Leaderboard" = "Streak Leaderboard";
+"No data yet" = "No data yet";
+"Start tracking habits to see your stats" = "Start tracking habits to see your stats";
+"Daily Completions" = "Daily Completions";
+"Completion Trend" = "Completion Trend";
+"Average across all habits · 12 weeks" = "Average across all habits · 12 weeks";
+"Last 14 Days" = "Last 14 Days";
+"12-Week Trend" = "12-Week Trend";
+"today" = "today";
+"avg" = "avg";
+"Habits" = "Habits";
+"This Month" = "This Month";
+"Avg Rate" = "Avg Rate";
+"Streak" = "Streak";
+"Best" = "Best";
+"Total" = "Total";
+"Rate" = "Rate";
+
+/* Achievements */
+"Achievements" = "Achievements";
+"Achievement Unlocked!" = "Achievement Unlocked!";
+
+/* Achievement titles */
+"First Flame" = "First Flame";
+"Week Warrior" = "Week Warrior";
+"Month Master" = "Month Master";
+"Century Club" = "Century Club";
+"Dedicated" = "Dedicated";
+"Committed" = "Committed";
+"Veteran" = "Veteran";
+"Habit Collector" = "Habit Collector";
+"Explorer" = "Explorer";
+"Perfect Day" = "Perfect Day";
+"Category Explorer" = "Category Explorer";
+"On Fire" = "On Fire";
+
+/* Achievement descriptions */
+"Complete your first habit" = "Complete your first habit";
+"Reach a 7-day streak" = "Reach a 7-day streak";
+"Reach a 30-day streak" = "Reach a 30-day streak";
+"Reach a 100-day streak" = "Reach a 100-day streak";
+"25 total completions" = "25 total completions";
+"100 total completions" = "100 total completions";
+"500 total completions" = "500 total completions";
+"Track 3 habits at once" = "Track 3 habits at once";
+"Track 5 habits at once" = "Track 5 habits at once";
+"Complete all habits in one day" = "Complete all habits in one day";
+"Have habits in 3 different categories" = "Have habits in 3 different categories";
+"3 habits with a streak of 7+" = "3 habits with a streak of 7+";
+
+/* Settings */
+"Settings" = "Settings";
+"Personalization" = "Personalization";
+"Color Theme" = "Color Theme";
+"App Appearance" = "App Appearance";
+"Appearance" = "Appearance";
+"Notifications" = "Notifications";
+"Permission Status" = "Permission Status";
+"Open System Settings" = "Open System Settings";
+"Haptic Feedback" = "Haptic Feedback";
+"Vibrate on habit completion" = "Vibrate on habit completion";
+"Preferences" = "Preferences";
+"About" = "About";
+"Version" = "Version";
+"Reminders will arrive on time" = "Reminders will arrive on time";
+"Enable in System Settings" = "Enable in System Settings";
+"Not configured yet" = "Not configured yet";
+
+/* Categories */
+"Health" = "Health";
+"Mind" = "Mind";
+"Lifestyle" = "Lifestyle";
+"Finance" = "Finance";
+"Social" = "Social";
+
+/* Frequency */
+"Daily" = "Daily";
+"Weekly" = "Weekly";
+
+/* Themes / Appearance */
+"Purple" = "Purple";
+"Blue" = "Blue";
+"Green" = "Green";
+"Orange" = "Orange";
+"Pink" = "Pink";
+"Red" = "Red";
+"Teal" = "Teal";
+"Indigo" = "Indigo";
+"System" = "System";
+"Light" = "Light";
+"Dark" = "Dark";
+
+/* Onboarding */
+"Habit Tracker" = "Habit Tracker";
+"Build better habits, daily" = "Build better habits, daily";
+"Build Better Habits" = "Build Better Habits";
+"Small daily actions compound into extraordinary results over time." = "Small daily actions compound into extraordinary results over time.";
+"Track any habit" = "Track any habit";
+"Daily reminders" = "Daily reminders";
+"Beautiful progress" = "Beautiful progress";
+"Build Your Streak" = "Build Your Streak";
+"Complete habits daily to grow your streak. Consistency is everything." = "Complete habits daily to grow your streak. Consistency is everything.";
+"See Your Progress" = "See Your Progress";
+"Year-at-a-glance heatmap, stats, and streak leaderboard keep you motivated." = "Year-at-a-glance heatmap, stats, and streak leaderboard keep you motivated.";
+"Yearly heatmap" = "Yearly heatmap";
+"Completion stats" = "Completion stats";
+"Confetti milestones 🎉" = "Confetti milestones 🎉";
+
+/* Streak pill */
+"%lld day streak" = "%lld day streak";

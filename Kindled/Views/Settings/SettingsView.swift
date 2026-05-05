@@ -98,7 +98,7 @@ struct SettingsView: View {
                                             .foregroundStyle(.white)
                                     }
                                 }
-                                Text(theme.rawValue)
+                                Text(LocalizedStringKey(theme.rawValue))
                                     .font(.caption2)
                                     .foregroundStyle(themeRaw == theme.rawValue ? theme.color : .secondary)
                                     .bold(themeRaw == theme.rawValue)
@@ -119,7 +119,7 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
 
                 Picker("Appearance", selection: $appearanceRaw) {
-                    ForEach(appearanceOptions, id: \.self) { Text($0).tag($0) }
+                    ForEach(appearanceOptions, id: \.self) { Text(LocalizedStringKey($0)).tag($0) }
                 }
                 .pickerStyle(.segmented)
             }
@@ -186,7 +186,7 @@ struct SettingsView: View {
                     icon: "waveform",
                     iconColor: .pink,
                     title: "Haptic Feedback",
-                    subtitle: "Vibrate on habit completion"
+                    subtitle: String(localized: "Vibrate on habit completion")
                 )
                 Spacer()
                 Toggle("", isOn: $hapticStored)
@@ -236,7 +236,7 @@ struct SettingsView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.white)
             }
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.headline)
         }
     }
@@ -253,10 +253,10 @@ struct SettingsView: View {
                     .foregroundStyle(.white)
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.subheadline)
                 if let subtitle {
-                    Text(subtitle)
+                    Text(verbatim: subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -266,9 +266,9 @@ struct SettingsView: View {
 
     private var notificationStatusDescription: String {
         switch notificationStatus {
-        case .authorized: return "Reminders will arrive on time"
-        case .denied:     return "Enable in System Settings"
-        default:          return "Not configured yet"
+        case .authorized: return String(localized: "Reminders will arrive on time")
+        case .denied:     return String(localized: "Enable in System Settings")
+        default:          return String(localized: "Not configured yet")
         }
     }
 
