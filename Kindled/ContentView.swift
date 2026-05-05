@@ -14,6 +14,7 @@ struct ContentView: View {
     @AppStorage("appLanguage") private var appLanguage: String = "system"
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var achievementManager = AchievementManager()
+    @State private var rootID = UUID()
 
     private var appLocale: Locale {
         appLanguage == "system" ? Locale.current : Locale(identifier: appLanguage)
@@ -52,6 +53,7 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gear")
                 }
         }
+        .id(rootID)
         .tint(activeThemeColor)
         .environment(\.themeColor, activeThemeColor)
         .environment(\.locale, appLocale)
@@ -59,6 +61,21 @@ struct ContentView: View {
         .preferredColorScheme(preferredColorScheme)
         .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {
             OnboardingView()
+        }
+        .onChange(of: appLanguage) { _, newValue in
+            applyLanguage(newValue)
+            rootID = UUID()
+        }
+        .task {
+            applyLanguage(appLanguage)
+        }
+    }
+
+    private func applyLanguage(_ language: String) {
+        if language == "system" {
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        } else {
+            UserDefaults.standard.set([language], forKey: "AppleLanguages")
         }
     }
 }
