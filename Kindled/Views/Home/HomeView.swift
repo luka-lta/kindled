@@ -156,7 +156,7 @@ struct HomeView: View {
                     withAnimation(.easeInOut(duration: 0.2)) { selectedCategory = nil }
                 }
                 ForEach(HabitCategory.allCases, id: \.self) { category in
-                    CategoryChip(label: category.rawValue, icon: category.icon, color: category.color, isSelected: selectedCategory == category) {
+                    CategoryChip(label: LocalizedStringKey(category.rawValue), icon: category.icon, color: category.color, isSelected: selectedCategory == category) {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             selectedCategory = selectedCategory == category ? nil : category
                         }
@@ -196,7 +196,7 @@ struct HomeView: View {
         .padding(.top, 48)
     }
 
-    private var greeting: String {
+    private var greeting: LocalizedStringKey {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
         case 0..<12: return "Good Morning"
@@ -286,7 +286,7 @@ struct HomeView: View {
 }
 
 private struct CategoryChip: View {
-    let label: String
+    let label: LocalizedStringKey
     let icon: String
     let color: Color
     let isSelected: Bool

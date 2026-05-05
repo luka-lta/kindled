@@ -11,8 +11,15 @@ import SwiftData
 struct ContentView: View {
     @AppStorage("appAppearance") private var appearanceRaw: String = "System"
     @AppStorage("appTheme") private var themeRaw: String = "Purple"
+    @AppStorage("appLanguage") private var appLanguage: String = "system"
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var achievementManager = AchievementManager()
+    @State private var rootID = UUID()
+    @State private var selectedTab: Int = 0
+
+    private var appLocale: Locale {
+        appLanguage == "system" ? Locale.current : Locale(identifier: appLanguage)
+    }
 
     private var preferredColorScheme: ColorScheme? {
         switch appearanceRaw {
@@ -27,32 +34,48 @@ struct ContentView: View {
     }
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             HomeView()
-                .tabItem {
-                    Label("Habits", systemImage: "checkmark.circle.fill")
-                }
+                .id(rootID)
+                .tabItem { Label("Habits", systemImage: "checkmark.circle.fill") }
+                .tag(0)
             StatisticsView()
-                .tabItem {
-                    Label("Stats", systemImage: "chart.bar.fill")
-                }
+                .id(rootID)
+                .tabItem { Label("Stats", systemImage: "chart.bar.fill") }
+                .tag(1)
             NavigationStack {
                 AchievementsView()
             }
-            .tabItem {
-                Label("Achievements", systemImage: "trophy.fill")
-            }
+            .id(rootID)
+            .tabItem { Label("Achievements", systemImage: "trophy.fill") }
+            .tag(2)
             SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
+                .id(rootID)
+                .tabItem { Label("Settings", systemImage: "gear") }
+                .tag(3)
         }
         .tint(activeThemeColor)
         .environment(\.themeColor, activeThemeColor)
+        .environment(\.locale, appLocale)
         .environment(achievementManager)
         .preferredColorScheme(preferredColorScheme)
         .fullScreenCover(isPresented: .constant(!hasSeenOnboarding)) {
             OnboardingView()
+        }
+        .onChange(of: appLanguage) { _, newValue in
+            applyLanguage(newValue)
+            rootID = UUID()
+        }
+        .task {
+            applyLanguage(appLanguage)
+        }
+    }
+
+    private func applyLanguage(_ language: String) {
+        if language == "system" {
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        } else {
+            UserDefaults.standard.set([language], forKey: "AppleLanguages")
         }
     }
 }

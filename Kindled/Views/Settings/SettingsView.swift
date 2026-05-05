@@ -7,8 +7,15 @@ struct SettingsView: View {
     @AppStorage("hapticEnabled") private var hapticStored = true
     @AppStorage("appAppearance") private var appearanceRaw: String = "System"
     @AppStorage("appTheme") private var themeRaw: String = "Purple"
+    @AppStorage("appLanguage") private var appLanguage: String = "system"
 
-    private let appearanceOptions = ["System", "Light", "Dark"]
+    private var currentLanguageLabel: String {
+        switch appLanguage {
+        case "en": return "🇬🇧 English"
+        case "de": return "🇩🇪 Deutsch"
+        default:   return "⚙️ System"
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -67,62 +74,43 @@ struct SettingsView: View {
 
     private var personalizationCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            cardHeader(title: "Personalization", icon: "paintbrush.fill", color: themeColor)
+            cardHeader(title: "Personalization", icon: "paintbrush.fill", color: .green)
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Color Theme")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 16) {
-                    ForEach(AppTheme.allCases, id: \.rawValue) { theme in
-                        Button {
-                            withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) {
-                                themeRaw = theme.rawValue
-                            }
-                        } label: {
-                            VStack(spacing: 6) {
-                                ZStack {
-                                    Circle()
-                                        .fill(theme.color)
-                                        .frame(width: 48, height: 48)
-                                        .shadow(
-                                            color: theme.color.opacity(themeRaw == theme.rawValue ? 0.5 : 0),
-                                            radius: 6, y: 3
-                                        )
-                                    if themeRaw == theme.rawValue {
-                                        Image(systemName: "checkmark")
-                                            .font(.system(size: 16, weight: .bold))
-                                            .foregroundStyle(.white)
-                                    }
-                                }
-                                Text(theme.rawValue)
-                                    .font(.caption2)
-                                    .foregroundStyle(themeRaw == theme.rawValue ? theme.color : .secondary)
-                                    .bold(themeRaw == theme.rawValue)
-                            }
-                        }
-                        .buttonStyle(.plain)
-                        .scaleEffect(themeRaw == theme.rawValue ? 1.1 : 1.0)
-                        .animation(.spring(response: 0.2, dampingFraction: 0.6), value: themeRaw)
-                    }
-                }
+            NavigationLink(destination: ThemePickerView()) {
+                settingsNavRow(
+                    icon: "paintpalette.fill",
+                    iconColor: .purple,
+                    title: "Color Theme",
+                    subtitle: Text(LocalizedStringKey(themeRaw))
+                )
             }
+            .foregroundStyle(.primary)
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 10) {
-                Text("App Appearance")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-
-                Picker("Appearance", selection: $appearanceRaw) {
-                    ForEach(appearanceOptions, id: \.self) { Text($0).tag($0) }
-                }
-                .pickerStyle(.segmented)
+            NavigationLink(destination: AppearancePickerView()) {
+                settingsNavRow(
+                    icon: "moon.fill",
+                    iconColor: .indigo,
+                    title: "App Appearance",
+                    subtitle: Text(LocalizedStringKey(appearanceRaw))
+                )
             }
+            .foregroundStyle(.primary)
+
+            Divider()
+
+            NavigationLink(destination: LanguagePickerView()) {
+                settingsNavRow(
+                    icon: "globe",
+                    iconColor: .teal,
+                    title: "Language",
+                    subtitle: Text(verbatim: currentLanguageLabel)
+                )
+            }
+            .foregroundStyle(.primary)
         }
         .padding(20)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
@@ -214,7 +202,7 @@ struct SettingsView: View {
                     subtitle: nil
                 )
                 Spacer()
-                Text("1.0.0")
+                Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -236,13 +224,13 @@ struct SettingsView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.white)
             }
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.headline)
         }
     }
 
     @ViewBuilder
-    private func settingRow(icon: String, iconColor: Color, title: String, subtitle: String?) -> some View {
+    private func settingRow(icon: String, iconColor: Color, title: String, subtitle: LocalizedStringKey?) -> some View {
         HStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
@@ -253,7 +241,7 @@ struct SettingsView: View {
                     .foregroundStyle(.white)
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.subheadline)
                 if let subtitle {
                     Text(subtitle)
@@ -264,7 +252,33 @@ struct SettingsView: View {
         }
     }
 
-    private var notificationStatusDescription: String {
+    @ViewBuilder
+    private func settingsNavRow(icon: String, iconColor: Color, title: String, subtitle: Text) -> some View {
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(iconColor)
+                    .frame(width: 32, height: 32)
+                Image(systemName: icon)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(LocalizedStringKey(title))
+                    .font(.subheadline)
+                subtitle
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption.bold())
+                .foregroundStyle(.tertiary)
+        }
+        .contentShape(Rectangle())
+    }
+
+    private var notificationStatusDescription: LocalizedStringKey {
         switch notificationStatus {
         case .authorized: return "Reminders will arrive on time"
         case .denied:     return "Enable in System Settings"

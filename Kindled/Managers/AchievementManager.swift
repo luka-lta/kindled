@@ -50,6 +50,58 @@ final class AchievementManager {
         UserDefaults.standard.set(encoded, forKey: datesKey)
     }
 
+    func progress(for id: String, habits: [Habit]) -> Double {
+        if isUnlocked(id) { return 1.0 }
+        let totalCompletions = habits.reduce(0) { $0 + $1.totalCompletions }
+        let maxStreak = habits.map { $0.currentStreak }.max() ?? 0
+        let calendar = Calendar.current
+        switch id {
+        case "first_flame":        return min(Double(totalCompletions), 1) / 1
+        case "week_warrior":       return min(Double(maxStreak), 7) / 7
+        case "month_master":       return min(Double(maxStreak), 30) / 30
+        case "century":            return min(Double(maxStreak), 100) / 100
+        case "dedicated":          return min(Double(totalCompletions), 25) / 25
+        case "committed":          return min(Double(totalCompletions), 100) / 100
+        case "veteran":            return min(Double(totalCompletions), 500) / 500
+        case "collector":          return min(Double(habits.count), 3) / 3
+        case "explorer":           return min(Double(habits.count), 5) / 5
+        case "category_explorer":  return min(Double(Set(habits.map { $0.category }).count), 3) / 3
+        case "on_fire":            return min(Double(habits.filter { $0.currentStreak >= 7 }.count), 3) / 3
+        case "perfect_day":
+            guard !habits.isEmpty else { return 0 }
+            let today = calendar.startOfDay(for: Date())
+            let done = habits.filter { h in h.entries.contains { $0.isCompleted && calendar.startOfDay(for: $0.completedDate) == today } }.count
+            return Double(done) / Double(habits.count)
+        default: return 0
+        }
+    }
+
+    func progressText(for id: String, habits: [Habit]) -> String {
+        if isUnlocked(id) { return "" }
+        let total = habits.reduce(0) { $0 + $1.totalCompletions }
+        let maxStreak = habits.map { $0.currentStreak }.max() ?? 0
+        let calendar = Calendar.current
+        switch id {
+        case "first_flame":        return "\(min(total, 1)) / 1"
+        case "week_warrior":       return "\(min(maxStreak, 7)) / 7 days"
+        case "month_master":       return "\(min(maxStreak, 30)) / 30 days"
+        case "century":            return "\(min(maxStreak, 100)) / 100 days"
+        case "dedicated":          return "\(min(total, 25)) / 25"
+        case "committed":          return "\(min(total, 100)) / 100"
+        case "veteran":            return "\(min(total, 500)) / 500"
+        case "collector":          return "\(min(habits.count, 3)) / 3 habits"
+        case "explorer":           return "\(min(habits.count, 5)) / 5 habits"
+        case "category_explorer":  return "\(min(Set(habits.map { $0.category }).count, 3)) / 3 categories"
+        case "on_fire":            return "\(min(habits.filter { $0.currentStreak >= 7 }.count, 3)) / 3 habits"
+        case "perfect_day":
+            guard !habits.isEmpty else { return "0 / 0" }
+            let today = calendar.startOfDay(for: Date())
+            let done = habits.filter { h in h.entries.contains { $0.isCompleted && calendar.startOfDay(for: $0.completedDate) == today } }.count
+            return "\(done) / \(habits.count) today"
+        default: return ""
+        }
+    }
+
     private func shouldUnlock(_ id: String, habits: [Habit]) -> Bool {
         let totalCompletions = habits.reduce(0) { $0 + $1.totalCompletions }
         let maxStreak = habits.map { $0.currentStreak }.max() ?? 0

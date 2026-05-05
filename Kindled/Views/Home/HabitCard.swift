@@ -61,22 +61,25 @@ struct HabitCard: View {
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 }
-                Text(habit.frequency.rawValue)
+                Text(LocalizedStringKey(habit.frequency.rawValue))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text("·")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
-                Label(habit.category.rawValue, systemImage: habit.category.icon)
+                Label(LocalizedStringKey(habit.category.rawValue), systemImage: habit.category.icon)
                     .font(.caption)
                     .foregroundStyle(habit.category.color.opacity(0.8))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
             }
+            .lineLimit(1)
         }
     }
 
     private var completionButton: some View {
         ZStack {
-            ProgressRing(progress: habit.completionRate, color: habitColor, lineWidth: 3)
+            ProgressRing(progress: habit.isCompletedToday ? 1.0 : 0.0, color: habitColor, lineWidth: 3)
                 .frame(width: 50, height: 50)
 
             Button(action: onToggle) {

@@ -20,7 +20,7 @@ struct StatCard: View {
                 .font(.system(size: 20, weight: .bold, design: .rounded))
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
-            Text(label)
+            Text(LocalizedStringKey(label))
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }

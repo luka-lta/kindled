@@ -51,7 +51,7 @@ struct AddEditHabitView: View {
                 .padding(.vertical, 16)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle(editHabit == nil ? "New Habit" : "Edit Habit")
+            .navigationTitle(editHabit == nil ? LocalizedStringKey("New Habit") : LocalizedStringKey("Edit Habit"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -93,7 +93,7 @@ struct AddEditHabitView: View {
                         .foregroundStyle(.white)
                 }
 
-                Text(title.isEmpty ? "Habit Name" : title)
+                (title.isEmpty ? Text("Habit Name") : Text(verbatim: title))
                     .font(.title2.bold())
                     .foregroundStyle(.white)
                     .opacity(title.isEmpty ? 0.5 : 1.0)
@@ -110,7 +110,7 @@ struct AddEditHabitView: View {
                     HStack(spacing: 4) {
                         Image(systemName: selectedCategory.icon)
                             .font(.caption2.bold())
-                        Text(selectedCategory.rawValue)
+                        Text(LocalizedStringKey(selectedCategory.rawValue))
                             .font(.caption.weight(.semibold))
                     }
                     .foregroundStyle(.white.opacity(0.75))
@@ -170,7 +170,7 @@ struct AddEditHabitView: View {
                                     .font(.system(size: 20, weight: .semibold))
                                     .foregroundStyle(selectedCategory == cat ? .white : cat.color)
                             }
-                            Text(cat.rawValue)
+                            Text(LocalizedStringKey(cat.rawValue))
                                 .font(.caption.bold())
                                 .foregroundStyle(selectedCategory == cat ? cat.color : .secondary)
                         }
@@ -226,7 +226,7 @@ struct AddEditHabitView: View {
                                 frequency = freq
                             }
                         } label: {
-                            Text(freq.rawValue)
+                            Text(LocalizedStringKey(freq.rawValue))
                                 .font(.subheadline.weight(.medium))
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 9)
@@ -258,7 +258,7 @@ struct AddEditHabitView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Daily Reminder")
                             .font(.subheadline)
-                        Text(reminderEnabled ? reminderTime.formatted(date: .omitted, time: .shortened) : "Off")
+                        (reminderEnabled ? Text(verbatim: reminderTime.formatted(date: .omitted, time: .shortened)) : Text("Off"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -295,7 +295,7 @@ struct AddEditHabitView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.white)
             }
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(.headline)
         }
         .animation(.spring(response: 0.3), value: color)
@@ -303,7 +303,7 @@ struct AddEditHabitView: View {
 
     @ViewBuilder
     private func sectionLabel(_ text: String) -> some View {
-        Text(text)
+        Text(LocalizedStringKey(text))
             .font(.subheadline)
             .foregroundStyle(.secondary)
     }
