@@ -50,11 +50,11 @@ struct AchievementsView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text("\(Int(Double(unlockedCount) / Double(Achievement.all.count) * 100))%")
+                Text(Achievement.all.isEmpty ? "0%" : "\(Int(Double(unlockedCount) / Double(Achievement.all.count) * 100))%")
                     .font(.subheadline.bold())
                     .foregroundStyle(themeColor)
             }
-            ProgressView(value: Double(unlockedCount), total: Double(Achievement.all.count))
+            ProgressView(value: Double(unlockedCount), total: max(1, Double(Achievement.all.count)))
                 .tint(themeColor)
         }
         .padding(.horizontal, 20)

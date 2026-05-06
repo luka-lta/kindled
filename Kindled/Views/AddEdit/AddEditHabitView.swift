@@ -359,9 +359,8 @@ struct AddEditHabitView: View {
             habit.reminders.append(reminder)
 
             Task {
-                // Remove old notifications only after new reminder is ready
-                oldReminderIDs.forEach { NotificationManager.shared.removeReminder(id: $0) }
                 let granted = await NotificationManager.shared.requestPermission()
+                oldReminderIDs.forEach { NotificationManager.shared.removeReminder(id: $0) }
                 if granted {
                     NotificationManager.shared.scheduleReminder(for: habit, reminder: reminder)
                 }

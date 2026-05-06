@@ -20,10 +20,11 @@ struct ConfettiView: UIViewRepresentable {
     }
 
     private func fire(in view: UIView) {
+        let bounds = view.bounds.isEmpty ? UIScreen.main.bounds : view.bounds
         let emitter = CAEmitterLayer()
-        emitter.emitterPosition = CGPoint(x: UIScreen.main.bounds.midX, y: -20)
+        emitter.emitterPosition = CGPoint(x: bounds.midX, y: -20)
         emitter.emitterShape = .line
-        emitter.emitterSize = CGSize(width: UIScreen.main.bounds.width, height: 1)
+        emitter.emitterSize = CGSize(width: bounds.width, height: 1)
         emitter.emitterCells = makeCells()
         view.layer.addSublayer(emitter)
 

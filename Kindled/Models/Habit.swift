@@ -65,7 +65,8 @@ final class Habit {
         for date in completedDates {
             if date == checkDate {
                 streak += 1
-                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate) ?? checkDate
+                guard let nextDate = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+                checkDate = nextDate
             } else if date < checkDate {
                 break
             }
@@ -75,9 +76,9 @@ final class Habit {
 
     var longestStreak: Int {
         let calendar = Calendar.current
-        let sortedDates = entries
+        let sortedDates = Array(Set(entries
             .filter { $0.isCompleted }
-            .map { calendar.startOfDay(for: $0.completedDate) }
+            .map { calendar.startOfDay(for: $0.completedDate) }))
             .sorted()
 
         guard !sortedDates.isEmpty else { return 0 }

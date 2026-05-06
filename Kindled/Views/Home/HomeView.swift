@@ -15,6 +15,8 @@ struct HomeView: View {
     @State private var selectedCategory: HabitCategory? = nil
     @State private var achievementQueue: [Achievement] = []
     @State private var visibleAchievement: Achievement? = nil
+    @State private var bannerTask: Task<Void, Never>? = nil
+    @AppStorage("hapticEnabled") private var hapticEnabled = true
 
     private var filteredHabits: [Habit] {
         guard let category = selectedCategory else { return habits }
@@ -82,8 +84,6 @@ struct HomeView: View {
                         .opacity(habits.isEmpty ? 0 : 1)
                         .disabled(habits.isEmpty)
                 }
-            }
-            .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showAddHabit = true
@@ -214,16 +214,16 @@ struct HomeView: View {
         }) {
             existing.isCompleted.toggle()
             if !existing.isCompleted {
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                if hapticEnabled { UIImpactFeedbackGenerator(style: .light).impactOccurred() }
                 return
             }
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
             pendingNoteEntry = existing
         } else {
             let entry = HabitEntry(completedDate: Date(), isCompleted: true)
             modelContext.insert(entry)
             habit.entries.append(entry)
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
             pendingNoteEntry = entry
         }
 
@@ -244,17 +244,22 @@ struct HomeView: View {
         withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
             visibleAchievement = next
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            dismissBanner()
+        bannerTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            guard !Task.isCancelled else { return }
+            await MainActor.run { dismissBanner() }
         }
     }
 
     private func dismissBanner() {
+        bannerTask?.cancel()
         withAnimation(.easeOut(duration: 0.3)) {
             visibleAchievement = nil
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-            showNextBanner()
+        bannerTask = Task {
+            try? await Task.sleep(for: .seconds(0.35))
+            guard !Task.isCancelled else { return }
+            await MainActor.run { showNextBanner() }
         }
     }
 
