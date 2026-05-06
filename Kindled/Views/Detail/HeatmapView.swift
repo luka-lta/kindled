@@ -24,7 +24,8 @@ struct HeatmapView: View {
         let today = calendar.startOfDay(for: Date())
         guard let start = calendar.date(byAdding: .day, value: -363, to: today) else { return [] }
 
-        let startWeekday = calendar.component(.weekday, from: start) - 1  // 0 = Sunday
+        let startWeekdayComponent = calendar.component(.weekday, from: start)
+        let startWeekday = (startWeekdayComponent - calendar.firstWeekday + 7) % 7
         var allDays: [Date?] = Array(repeating: nil, count: startWeekday)
 
         var current = start

@@ -24,6 +24,9 @@ final class NotificationManager {
         var components = DateComponents()
         components.hour = reminder.hour
         components.minute = reminder.minute
+        if habit.frequency == .weekly {
+            components.weekday = Calendar.current.component(.weekday, from: Date())
+        }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
         let request = UNNotificationRequest(
@@ -31,7 +34,11 @@ final class NotificationManager {
             content: content,
             trigger: trigger
         )
-        UNUserNotificationCenter.current().add(request)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error {
+                print("[NotificationManager] Failed to schedule: \(error)")
+            }
+        }
     }
 
     func removeReminder(id: String) {

@@ -29,7 +29,8 @@ struct CalendarGridView: View {
               let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: displayedMonth))
         else { return [] }
 
-        let weekday = calendar.component(.weekday, from: firstDay) - 1
+        let weekdayComponent = calendar.component(.weekday, from: firstDay)
+        let weekday = (weekdayComponent - calendar.firstWeekday + 7) % 7
         var days: [Date?] = Array(repeating: nil, count: weekday)
         for day in range {
             if let date = calendar.date(byAdding: .day, value: day - 1, to: firstDay) {
@@ -39,7 +40,12 @@ struct CalendarGridView: View {
         return days
     }
 
-    private let weekdayLabels = ["S", "M", "T", "W", "T", "F", "S"]
+    private var weekdayLabels: [String] {
+        let calendar = Calendar.current
+        let symbols = calendar.veryShortWeekdaySymbols
+        let firstWeekday = calendar.firstWeekday - 1
+        return Array(symbols[firstWeekday...] + symbols[..<firstWeekday])
+    }
 
     var body: some View {
         VStack(spacing: 16) {
