@@ -8,6 +8,8 @@ struct SettingsView: View {
     @AppStorage("appAppearance") private var appearanceRaw: String = "System"
     @AppStorage("appTheme") private var themeRaw: String = "Purple"
     @AppStorage("appLanguage") private var appLanguage: String = "system"
+    @AppStorage("userName") private var userName: String = ""
+    @State private var showNameEditor = false
 
     private var currentLanguageLabel: String {
         switch appLanguage {
@@ -75,6 +77,21 @@ struct SettingsView: View {
     private var personalizationCard: some View {
         VStack(alignment: .leading, spacing: 16) {
             cardHeader(title: "Personalization", icon: "paintbrush.fill", color: .green)
+
+            Divider()
+
+            Button { showNameEditor = true } label: {
+                settingsNavRow(
+                    icon: "person.fill",
+                    iconColor: .blue,
+                    title: "Your Name",
+                    subtitle: userName.isEmpty ? Text("Not set") : Text(verbatim: userName)
+                )
+            }
+            .foregroundStyle(.primary)
+            .sheet(isPresented: $showNameEditor) {
+                NameEditorSheet(userName: $userName)
+            }
 
             Divider()
 
@@ -311,5 +328,68 @@ struct SettingsView: View {
                 notificationStatus = settings.authorizationStatus
             }
         }
+    }
+}
+
+private struct NameEditorSheet: View {
+    @Binding var userName: String
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.themeColor) private var themeColor
+    @State private var draft: String = ""
+
+    var body: some View {
+        VStack(spacing: 28) {
+            VStack(spacing: 8) {
+                Image(systemName: "person.circle.fill")
+                    .font(.system(size: 52))
+                    .foregroundStyle(themeColor)
+                Text("Your Name")
+                    .font(.title2.bold())
+                Text("Used in your greeting on the home screen")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.top, 8)
+
+            TextField("Enter your name", text: $draft)
+                .font(.body)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
+                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+                .submitLabel(.done)
+                .onSubmit { save() }
+
+            VStack(spacing: 12) {
+                Button(action: save) {
+                    Text("Save")
+                        .font(.body.bold())
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(themeColor, in: RoundedRectangle(cornerRadius: 14))
+                        .foregroundStyle(.white)
+                }
+
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Cancel")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 24)
+        .presentationDetents([.fraction(0.5)])
+        .presentationDragIndicator(.visible)
+        .presentationCornerRadius(28)
+        .onAppear { draft = userName }
+    }
+
+    private func save() {
+        userName = draft.trimmingCharacters(in: .whitespaces)
+        dismiss()
     }
 }

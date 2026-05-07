@@ -19,6 +19,8 @@ struct HomeView: View {
     @State private var visibleAchievement: Achievement? = nil
     @State private var bannerTask: Task<Void, Never>? = nil
     @AppStorage("hapticEnabled") private var hapticEnabled = true
+    @AppStorage("userName") private var userName: String = ""
+    @State private var emptyPulse = false
 
     private var filteredHabits: [Habit] {
         guard let category = selectedCategory else { return habits }
@@ -128,7 +130,7 @@ struct HomeView: View {
     private var headerCard: some View {
         HStack(alignment: .center, spacing: 20) {
             VStack(alignment: .leading, spacing: 6) {
-                Text(greeting)
+                greetingText
                     .font(.title3.bold())
                 Text(Date().formatted(.dateTime.weekday(.wide).month(.wide).day()))
                     .font(.subheadline)
@@ -174,6 +176,7 @@ struct HomeView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 4)
         }
+        .sensoryFeedback(.selection, trigger: selectedCategory)
     }
 
     private var emptyState: some View {
@@ -181,6 +184,10 @@ struct HomeView: View {
             Image(systemName: "checkmark.circle.badge.plus")
                 .font(.system(size: 64))
                 .foregroundStyle(themeColor.opacity(0.4))
+                .scaleEffect(emptyPulse ? 1.1 : 1.0)
+                .animation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: emptyPulse)
+                .onAppear { emptyPulse = true }
+                .onDisappear { emptyPulse = false }
             Text("No habits yet")
                 .font(.title3.bold())
             Text("Tap + to add your first habit")
@@ -204,13 +211,16 @@ struct HomeView: View {
         .padding(.top, 48)
     }
 
-    private var greeting: LocalizedStringKey {
+    private var greetingText: Text {
         let hour = Calendar.current.component(.hour, from: Date())
+        let base: LocalizedStringKey
         switch hour {
-        case 0..<12: return "Good Morning"
-        case 12..<17: return "Good Afternoon"
-        default:      return "Good Evening"
+        case 0..<12: base = "Good Morning"
+        case 12..<17: base = "Good Afternoon"
+        default:      base = "Good Evening"
         }
+        let name = userName.trimmingCharacters(in: .whitespaces)
+        return name.isEmpty ? Text(base) : Text(base) + Text(", \(name)")
     }
 
     private func toggleHabit(_ habit: Habit) {

@@ -11,7 +11,12 @@ struct HabitDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                headerBanner
+                GeometryReader { geo in
+                    let offset = geo.frame(in: .named("detailScroll")).minY
+                    parallaxHeaderBanner(scrollOffset: offset)
+                }
+                .frame(height: 272)
+
                 VStack(spacing: 16) {
                     statsRow
                     HabitChartsView(habit: habit)
@@ -24,6 +29,7 @@ struct HabitDetailView: View {
                 .padding(.bottom, 40)
             }
         }
+        .coordinateSpace(name: "detailScroll")
         .background(Color(.systemGroupedBackground))
         .ignoresSafeArea(edges: .top)
         .navigationBarTitleDisplayMode(.inline)
@@ -47,7 +53,7 @@ struct HabitDetailView: View {
 
     // MARK: - Header
 
-    private var headerBanner: some View {
+    private func parallaxHeaderBanner(scrollOffset: CGFloat) -> some View {
         ZStack(alignment: .bottom) {
             LinearGradient(
                 colors: [habitColor, habitColor.opacity(0.55)],
@@ -55,9 +61,9 @@ struct HabitDetailView: View {
                 endPoint: .bottomTrailing
             )
 
-            // Subtle pattern overlay
             Rectangle()
                 .fill(.white.opacity(0.04))
+                .offset(y: scrollOffset < 0 ? scrollOffset * 0.4 : 0)
 
             VStack(spacing: 14) {
                 iconCircle
@@ -77,14 +83,16 @@ struct HabitDetailView: View {
                 }
             }
             .padding(.bottom, 36)
+            .offset(y: scrollOffset > 0 ? -scrollOffset * 0.3 : 0)
         }
-        .frame(height: 272)
+        .frame(height: max(272, 272 + scrollOffset))
         .clipShape(.rect(
             topLeadingRadius: 0,
             bottomLeadingRadius: 32,
             bottomTrailingRadius: 32,
             topTrailingRadius: 0
         ))
+        .offset(y: scrollOffset > 0 ? -scrollOffset : 0)
     }
 
     private var iconCircle: some View {

@@ -11,10 +11,21 @@ struct AchievementsView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 2)
     private var unlockedCount: Int { Achievement.all.filter { manager.isUnlocked($0.id) }.count }
 
+    private var nextGoal: (achievement: Achievement, progress: Double, progressText: String)? {
+        let locked = Achievement.all.filter { !manager.isUnlocked($0.id) }
+        guard !locked.isEmpty else { return nil }
+        return locked
+            .map { (achievement: $0, progress: manager.progress(for: $0.id, habits: habits), progressText: manager.progressText(for: $0.id, habits: habits)) }
+            .max(by: { $0.progress < $1.progress })
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 progressHeader
+                if let goal = nextGoal {
+                    nextGoalCard(goal.achievement, progress: goal.progress, progressText: goal.progressText)
+                }
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(Achievement.all) { achievement in
                         AchievementCard(
@@ -41,6 +52,44 @@ struct AchievementsView: View {
                 progressText: manager.progressText(for: achievement.id, habits: habits)
             )
         }
+    }
+
+    private func nextGoalCard(_ achievement: Achievement, progress: Double, progressText: String) -> some View {
+        HStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .fill(achievement.color.opacity(0.18))
+                    .frame(width: 56, height: 56)
+                Image(systemName: achievement.icon)
+                    .font(.system(size: 24))
+                    .foregroundStyle(achievement.color)
+            }
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text("Next Goal")
+                        .font(.caption.bold())
+                        .foregroundStyle(themeColor)
+                    Spacer()
+                    Text(progressText)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Text(LocalizedStringKey(achievement.title))
+                    .font(.subheadline.bold())
+                Text(LocalizedStringKey(achievement.description))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                ProgressView(value: progress)
+                    .tint(achievement.color)
+            }
+        }
+        .padding(16)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .strokeBorder(achievement.color.opacity(0.3), lineWidth: 1.5)
+        )
+        .padding(.horizontal, 16)
     }
 
     private var progressHeader: some View {
