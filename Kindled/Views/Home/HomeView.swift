@@ -8,6 +8,8 @@ struct HomeView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.themeColor) var themeColor
     @Environment(AchievementManager.self) var achievementManager
+    @Environment(AdManager.self) var adManager
+    @Environment(ConsentManager.self) var consentManager
     @State private var showAddHabit = false
     @State private var editHabit: Habit? = nil
     @State private var confettiFireID: UUID? = nil
@@ -102,6 +104,12 @@ struct HomeView: View {
             }
             .sheet(item: $pendingNoteEntry) { entry in
                 NoteEntryView(entry: entry)
+            }
+            .safeAreaInset(edge: .bottom) {
+                if consentManager.canShowAds {
+                    BannerAdView()
+                        .frame(height: BannerAdView.height)
+                }
             }
             .overlay { ConfettiOverlay(fireID: confettiFireID) }
             .overlay(alignment: .top) {
@@ -226,6 +234,8 @@ struct HomeView: View {
             if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
             pendingNoteEntry = entry
         }
+
+        adManager.recordCompletion()
 
         if streakMilestones.contains(habit.currentStreak) {
             confettiFireID = UUID()
