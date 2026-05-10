@@ -14,7 +14,7 @@ private let languageOptions: [LanguageOption] = [
 ]
 
 struct LanguagePickerView: View {
-    @AppStorage("appLanguage") private var appLanguage: String = "system"
+    @AppStorage(StorageKeys.appLanguage) private var appLanguage: String = "system"
     @Environment(\.themeColor) var themeColor
 
     var body: some View {

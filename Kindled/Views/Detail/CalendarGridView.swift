@@ -5,12 +5,6 @@ struct CalendarGridView: View {
     @State private var displayedMonth = Date()
     @State private var selectedEntry: HabitEntry? = nil
 
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
-
     private var habitColor: Color {
         Color(hex: habit.colorHex) ?? .purple
     }
@@ -18,7 +12,7 @@ struct CalendarGridView: View {
     private var entriesByDateString: [String: HabitEntry] {
         var dict: [String: HabitEntry] = [:]
         for entry in habit.entries where entry.isCompleted {
-            dict[Self.dateFormatter.string(from: entry.completedDate)] = entry
+            dict[Habit.ymdFormatter.string(from: entry.completedDate)] = entry
         }
         return dict
     }
@@ -111,7 +105,7 @@ struct CalendarGridView: View {
         return LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 6) {
             ForEach(Array(daysInMonth.enumerated()), id: \.offset) { _, date in
                 if let date = date {
-                    let key = Self.dateFormatter.string(from: date)
+                    let key = Habit.ymdFormatter.string(from: date)
                     let entry = entries[key]
                     DayCell(date: date, isCompleted: entry != nil, hasNote: entry?.note != nil, color: habitColor)
                         .onTapGesture {

@@ -11,4 +11,5 @@ enum AdConstants {
     #endif
 
     static let interstitialFrequency = 5
+    static let reviewPromptThreshold = 10
 }

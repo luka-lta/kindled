@@ -18,8 +18,8 @@ struct HomeView: View {
     @State private var achievementQueue: [Achievement] = []
     @State private var visibleAchievement: Achievement? = nil
     @State private var bannerTask: Task<Void, Never>? = nil
-    @AppStorage("hapticEnabled") private var hapticEnabled = true
-    @AppStorage("userName") private var userName: String = ""
+    @AppStorage(StorageKeys.hapticEnabled) private var hapticEnabled = true
+    @AppStorage(StorageKeys.userName) private var userName: String = ""
     @State private var emptyPulse = false
 
     private var filteredHabits: [Habit] {
@@ -123,6 +123,10 @@ struct HomeView: View {
                     .padding(.top, 8)
                     .zIndex(10)
                 }
+            }
+            .onDisappear {
+                bannerTask?.cancel()
+                bannerTask = nil
             }
         }
     }
@@ -231,19 +235,19 @@ struct HomeView: View {
             calendar.startOfDay(for: $0.completedDate) == today
         }) {
             existing.isCompleted.toggle()
-            if !existing.isCompleted {
-                if hapticEnabled { UIImpactFeedbackGenerator(style: .light).impactOccurred() }
-                return
+            if hapticEnabled {
+                UIImpactFeedbackGenerator(style: existing.isCompleted ? .medium : .light).impactOccurred()
             }
-            if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
+            if !existing.isCompleted { return }
             pendingNoteEntry = existing
-        } else {
-            let entry = HabitEntry(completedDate: Date(), isCompleted: true)
-            modelContext.insert(entry)
-            habit.entries.append(entry)
-            if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
-            pendingNoteEntry = entry
+            return
         }
+
+        let entry = HabitEntry(completedDate: Date(), isCompleted: true)
+        modelContext.insert(entry)
+        habit.entries.append(entry)
+        if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
+        pendingNoteEntry = entry
 
         adManager.recordCompletion()
 

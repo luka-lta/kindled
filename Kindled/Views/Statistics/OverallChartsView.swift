@@ -4,12 +4,6 @@ import Charts
 struct OverallChartsView: View {
     let habits: [Habit]
 
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
-
     // MARK: - Data types
 
     private struct DailyCount: Identifiable {
@@ -27,9 +21,9 @@ struct OverallChartsView: View {
     // MARK: - Computed data
 
     private func completedCount(on date: Date) -> Int {
-        let key = Self.dateFormatter.string(from: date)
+        let key = Habit.ymdFormatter.string(from: date)
         return habits.filter { habit in
-            habit.entries.contains { $0.isCompleted && Self.dateFormatter.string(from: $0.completedDate) == key }
+            habit.completedDateStrings.contains(key)
         }.count
     }
 

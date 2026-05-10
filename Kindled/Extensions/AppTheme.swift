@@ -25,7 +25,7 @@ enum AppTheme: String, CaseIterable {
 }
 
 struct ThemeColorKey: EnvironmentKey {
-    static let defaultValue: Color = Color(red: 0.42, green: 0.39, blue: 1.00)
+    static let defaultValue: Color = AppTheme.purple.color
 }
 
 extension EnvironmentValues {

@@ -4,11 +4,11 @@ import UserNotifications
 struct SettingsView: View {
     @Environment(\.themeColor) var themeColor
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
-    @AppStorage("hapticEnabled") private var hapticStored = true
-    @AppStorage("appAppearance") private var appearanceRaw: String = "System"
-    @AppStorage("appTheme") private var themeRaw: String = "Purple"
-    @AppStorage("appLanguage") private var appLanguage: String = "system"
-    @AppStorage("userName") private var userName: String = ""
+    @AppStorage(StorageKeys.hapticEnabled) private var hapticStored = true
+    @AppStorage(StorageKeys.appAppearance) private var appearanceRaw: String = "System"
+    @AppStorage(StorageKeys.appTheme) private var themeRaw: String = "Purple"
+    @AppStorage(StorageKeys.appLanguage) private var appLanguage: String = "system"
+    @AppStorage(StorageKeys.userName) private var userName: String = ""
     @State private var showNameEditor = false
 
     private var currentLanguageLabel: String {

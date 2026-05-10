@@ -98,8 +98,11 @@ final class Habit {
     }
 
     var completionRate: Double {
-        guard !entries.isEmpty else { return 0 }
-        return Double(entries.filter { $0.isCompleted }.count) / Double(entries.count)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let start = calendar.startOfDay(for: createdDate)
+        let days = (calendar.dateComponents([.day], from: start, to: today).day ?? 0) + 1
+        return Double(entries.filter { $0.isCompleted }.count) / Double(max(days, 1))
     }
 
     var isCompletedToday: Bool {
@@ -112,5 +115,15 @@ final class Habit {
 
     var totalCompletions: Int {
         entries.filter { $0.isCompleted }.count
+    }
+
+    static let ymdFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        return f
+    }()
+
+    var completedDateStrings: Set<String> {
+        Set(entries.filter { $0.isCompleted }.map { Habit.ymdFormatter.string(from: $0.completedDate) })
     }
 }

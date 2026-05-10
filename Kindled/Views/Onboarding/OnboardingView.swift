@@ -33,8 +33,8 @@ private let onboardingPages: [OnboardingPage] = [
 ]
 
 struct OnboardingView: View {
-    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
-    @AppStorage("userName") private var savedUserName: String = ""
+    @AppStorage(StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
+    @AppStorage(StorageKeys.userName) private var savedUserName: String = ""
     @State private var currentPage = 0
     @State private var nameInput: String = ""
 

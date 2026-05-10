@@ -5,13 +5,13 @@ final class AchievementManager {
     private(set) var unlockedIDs: Set<String>
     private(set) var unlockDates: [String: Date]
 
-    private let idsKey = "achievement_unlocked_ids"
-    private let datesKey = "achievement_unlock_dates"
+    private static let idsKey = "achievement_unlocked_ids"
+    private static let datesKey = "achievement_unlock_dates"
 
     init() {
-        let stored = UserDefaults.standard.stringArray(forKey: "achievement_unlocked_ids") ?? []
+        let stored = UserDefaults.standard.stringArray(forKey: Self.idsKey) ?? []
         self.unlockedIDs = Set(stored)
-        let storedDates = UserDefaults.standard.dictionary(forKey: "achievement_unlock_dates") as? [String: Double] ?? [:]
+        let storedDates = UserDefaults.standard.dictionary(forKey: Self.datesKey) as? [String: Double] ?? [:]
         self.unlockDates = storedDates.mapValues { Date(timeIntervalSince1970: $0) }
     }
 
@@ -45,9 +45,9 @@ final class AchievementManager {
     }
 
     private func persist() {
-        UserDefaults.standard.set(Array(unlockedIDs), forKey: idsKey)
+        UserDefaults.standard.set(Array(unlockedIDs), forKey: Self.idsKey)
         let encoded = unlockDates.mapValues { $0.timeIntervalSince1970 }
-        UserDefaults.standard.set(encoded, forKey: datesKey)
+        UserDefaults.standard.set(encoded, forKey: Self.datesKey)
     }
 
     func progress(for id: String, habits: [Habit]) -> Double {

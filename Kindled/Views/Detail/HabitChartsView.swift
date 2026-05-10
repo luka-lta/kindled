@@ -4,22 +4,12 @@ import Charts
 struct HabitChartsView: View {
     let habit: Habit
 
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
-
     private var habitColor: Color {
         Color(hex: habit.colorHex) ?? .purple
     }
 
-    private var completedDateStrings: Set<String> {
-        Set(habit.entries.filter { $0.isCompleted }.map { Self.dateFormatter.string(from: $0.completedDate) })
-    }
-
     private func isCompleted(_ date: Date) -> Bool {
-        completedDateStrings.contains(Self.dateFormatter.string(from: date))
+        habit.completedDateStrings.contains(Habit.ymdFormatter.string(from: date))
     }
 
     // MARK: - Data
