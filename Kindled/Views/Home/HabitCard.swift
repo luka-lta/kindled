@@ -9,11 +9,12 @@ struct HabitCard: View {
     }
 
     var body: some View {
-        HStack(spacing: 14) {
-            iconView
+        let isCompleted = habit.isCompletedToday
+        return HStack(spacing: 14) {
+            iconView(isCompleted: isCompleted)
             infoView
             Spacer()
-            completionButton
+            completionButton(isCompleted: isCompleted)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
@@ -21,8 +22,8 @@ struct HabitCard: View {
             RoundedRectangle(cornerRadius: 18)
                 .fill(.regularMaterial)
             RoundedRectangle(cornerRadius: 18)
-                .fill(habitColor.opacity(habit.isCompletedToday ? 0.07 : 0))
-                .animation(.easeInOut(duration: 0.25), value: habit.isCompletedToday)
+                .fill(habitColor.opacity(isCompleted ? 0.07 : 0))
+                .animation(.easeInOut(duration: 0.25), value: isCompleted)
         }
         .overlay(alignment: .leading) {
             habitColor
@@ -36,21 +37,21 @@ struct HabitCard: View {
         }
         .overlay {
             RoundedRectangle(cornerRadius: 18)
-                .strokeBorder(habitColor.opacity(habit.isCompletedToday ? 0.3 : 0), lineWidth: 1.5)
+                .strokeBorder(habitColor.opacity(isCompleted ? 0.3 : 0), lineWidth: 1.5)
         }
-        .animation(.easeInOut(duration: 0.25), value: habit.isCompletedToday)
+        .animation(.easeInOut(duration: 0.25), value: isCompleted)
     }
 
-    private var iconView: some View {
+    private func iconView(isCompleted: Bool) -> some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14)
-                .fill(habitColor.opacity(habit.isCompletedToday ? 0.22 : 0.12))
+                .fill(habitColor.opacity(isCompleted ? 0.22 : 0.12))
                 .frame(width: 52, height: 52)
             Image(systemName: habit.icon)
                 .font(.system(size: 24))
                 .foregroundStyle(habitColor)
         }
-        .animation(.easeInOut(duration: 0.2), value: habit.isCompletedToday)
+        .animation(.easeInOut(duration: 0.2), value: isCompleted)
     }
 
     private var infoView: some View {
@@ -83,19 +84,19 @@ struct HabitCard: View {
         }
     }
 
-    private var completionButton: some View {
+    private func completionButton(isCompleted: Bool) -> some View {
         ZStack {
-            ProgressRing(progress: habit.isCompletedToday ? 1.0 : 0.0, color: habitColor, lineWidth: 3)
+            ProgressRing(progress: isCompleted ? 1.0 : 0.0, color: habitColor, lineWidth: 3)
                 .frame(width: 50, height: 50)
 
             Button(action: onToggle) {
                 ZStack {
                     Circle()
-                        .fill(habit.isCompletedToday ? habitColor : habitColor.opacity(0.12))
+                        .fill(isCompleted ? habitColor : habitColor.opacity(0.12))
                         .frame(width: 36, height: 36)
-                    Image(systemName: habit.isCompletedToday ? "checkmark" : "plus")
+                    Image(systemName: isCompleted ? "checkmark" : "plus")
                         .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(habit.isCompletedToday ? .white : habitColor)
+                        .foregroundStyle(isCompleted ? .white : habitColor)
                 }
             }
             .buttonStyle(ScaleButtonStyle())

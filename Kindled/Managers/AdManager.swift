@@ -1,4 +1,5 @@
 import GoogleMobileAds
+import StoreKit
 import UIKit
 
 @Observable
@@ -6,8 +7,9 @@ final class AdManager: NSObject {
     private var interstitial: InterstitialAd?
     private var isLoading = false
 
-    override init() {
-        super.init()
+    private enum Keys {
+        static let completionCount = "habitCompletionCount"
+        static let reviewRequested = "reviewRequested"
     }
 
     func start() {
@@ -15,11 +17,21 @@ final class AdManager: NSObject {
     }
 
     func recordCompletion() {
-        let count = UserDefaults.standard.integer(forKey: "habitCompletionCount") + 1
-        UserDefaults.standard.set(count, forKey: "habitCompletionCount")
+        let count = UserDefaults.standard.integer(forKey: Keys.completionCount) + 1
+        UserDefaults.standard.set(count, forKey: Keys.completionCount)
         if count % AdConstants.interstitialFrequency == 0 {
             showInterstitial()
         }
+        if count >= AdConstants.reviewPromptThreshold,
+           !UserDefaults.standard.bool(forKey: Keys.reviewRequested) {
+            requestReview()
+            UserDefaults.standard.set(true, forKey: Keys.reviewRequested)
+        }
+    }
+
+    private func requestReview() {
+        guard let scene = UIApplication.shared.foregroundWindowScene else { return }
+        AppStore.requestReview(in: scene)
     }
 
     private func loadInterstitial() {
@@ -29,13 +41,16 @@ final class AdManager: NSObject {
             with: AdConstants.interstitialAdUnitID,
             request: Request()
         ) { [weak self] ad, error in
-            self?.isLoading = false
-            if let error {
-                print("[AdManager] Interstitial load error: \(error.localizedDescription)")
-                return
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.isLoading = false
+                if let error {
+                    print("[AdManager] Interstitial load error: \(error.localizedDescription)")
+                    return
+                }
+                self.interstitial = ad
+                self.interstitial?.fullScreenContentDelegate = self
             }
-            self?.interstitial = ad
-            self?.interstitial?.fullScreenContentDelegate = self
         }
     }
 
@@ -45,9 +60,8 @@ final class AdManager: NSObject {
             return
         }
         guard
-            let windowScene = UIApplication.shared.connectedScenes
-                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-            let rootVC = windowScene.keyWindow?.rootViewController
+            let scene = UIApplication.shared.foregroundWindowScene,
+            let rootVC = scene.keyWindow?.rootViewController
         else { return }
         ad.present(from: rootVC)
     }

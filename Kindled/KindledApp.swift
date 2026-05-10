@@ -24,18 +24,14 @@ struct KindledApp: App {
     @State private var adManager = AdManager()
     @State private var consentManager = ConsentManager()
 
-    init() {}
-
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(adManager)
                 .environment(consentManager)
                 .task {
-                    await MainActor.run {
-                        consentManager.requestConsentAndStart {
-                            adManager.start()
-                        }
+                    consentManager.requestConsentAndStart {
+                        adManager.start()
                     }
                 }
         }

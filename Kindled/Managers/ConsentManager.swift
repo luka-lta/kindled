@@ -22,15 +22,16 @@ final class ConsentManager {
         params.tagForUnderAgeOfConsent = false
 
         UMPConsentInformation.sharedInstance.requestConsentInfoUpdate(with: params) { [weak self] _ in
-            guard let self else { completion(); return }
-            self.presentFormIfNeeded(then: completion)
+            Task { @MainActor [weak self] in
+                guard let self else { completion(); return }
+                self.presentFormIfNeeded(then: completion)
+            }
         }
     }
 
     private func presentFormIfNeeded(then completion: @escaping () -> Void) {
         guard
-            let scene = UIApplication.shared.connectedScenes
-                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+            let scene = UIApplication.shared.foregroundWindowScene,
             let root = scene.keyWindow?.rootViewController
         else {
             completion()

@@ -13,7 +13,7 @@ private let appearanceOptions: [AppearanceOption] = [
 ]
 
 struct AppearancePickerView: View {
-    @AppStorage("appAppearance") private var appearanceRaw: String = "System"
+    @AppStorage(StorageKeys.appAppearance) private var appearanceRaw: String = "System"
     @Environment(\.themeColor) var themeColor
 
     var body: some View {

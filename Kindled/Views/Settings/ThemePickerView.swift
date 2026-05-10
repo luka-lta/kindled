@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ThemePickerView: View {
-    @AppStorage("appTheme") private var themeRaw: String = "Purple"
+    @AppStorage(StorageKeys.appTheme) private var themeRaw: String = "Purple"
 
     private var selectedTheme: AppTheme {
         AppTheme(rawValue: themeRaw) ?? .purple

@@ -4,18 +4,8 @@ struct HeatmapView: View {
     let habit: Habit
     @State private var hasScrolled = false
 
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
-
     private var habitColor: Color {
         Color(hex: habit.colorHex) ?? .purple
-    }
-
-    private var completedDateStrings: Set<String> {
-        Set(habit.entries.filter { $0.isCompleted }.map { Self.dateFormatter.string(from: $0.completedDate) })
     }
 
     // 52 columns × 7 rows, leftmost = oldest week, rightmost = current week
@@ -41,7 +31,7 @@ struct HeatmapView: View {
     }
 
     private func isCompleted(_ date: Date) -> Bool {
-        completedDateStrings.contains(Self.dateFormatter.string(from: date))
+        habit.completedDateStrings.contains(Habit.ymdFormatter.string(from: date))
     }
 
     var body: some View {
@@ -83,15 +73,17 @@ struct HeatmapView: View {
             }
 
             HStack(spacing: 6) {
-                Text("Less")
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(habitColor.opacity(0.1))
+                    .frame(width: 13, height: 13)
+                Text("Not done")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                ForEach([0.1, 0.4, 0.7, 1.0] as [Double], id: \.self) { opacity in
-                    RoundedRectangle(cornerRadius: 2)
-                        .fill(habitColor.opacity(opacity))
-                        .frame(width: 13, height: 13)
-                }
-                Text("More")
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(habitColor)
+                    .frame(width: 13, height: 13)
+                    .padding(.leading, 6)
+                Text("Done")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }

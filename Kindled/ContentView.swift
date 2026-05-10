@@ -9,10 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @AppStorage("appAppearance") private var appearanceRaw: String = "System"
-    @AppStorage("appTheme") private var themeRaw: String = "Purple"
-    @AppStorage("appLanguage") private var appLanguage: String = "system"
-    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    @AppStorage(StorageKeys.appAppearance) private var appearanceRaw: String = "System"
+    @AppStorage(StorageKeys.appTheme) private var themeRaw: String = "Purple"
+    @AppStorage(StorageKeys.appLanguage) private var appLanguage: String = "system"
+    @AppStorage(StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
     @State private var achievementManager = AchievementManager()
     @State private var rootID = UUID()
     @State private var selectedTab: Int = 0
