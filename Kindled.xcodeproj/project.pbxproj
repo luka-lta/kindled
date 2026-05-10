@@ -6,6 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A01281892FABD5FF00629E5A /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = A01281882FABD5FF00629E5A /* GoogleMobileAds */; };
+		A012818B2FABD5FF00629E5A /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = A012818A2FABD5FF00629E5A /* GoogleUserMessagingPlatform */; };
+		A01286342FAE159B00629E5A /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = A01286332FAE159B00629E5A /* RevenueCat */; };
+		A01286362FAE159B00629E5A /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = A01286352FAE159B00629E5A /* RevenueCatUI */; };
+		A01286A02FAFCC7600629E5A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A012869F2FAFCC7600629E5A /* FirebaseAnalytics */; };
+		A01286A42FAFCF9000629E5A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A01286A32FAFCF9000629E5A /* GoogleService-Info.plist */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		A07078A92FA60447009298AF /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -20,14 +29,28 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A01286A32FAFCF9000629E5A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A07078942FA60446009298AF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		A07078962FA60446009298AF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kindled.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A012818B2FABD61700629E5A /* Exceptions for "Kindled" folder in "Kindled" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A0A7F8CD2FA54E3F00BCE594 /* Kindled */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A0A7F8D02FA54E3F00BCE594 /* Kindled */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A012818B2FABD61700629E5A /* Exceptions for "Kindled" folder in "Kindled" target */,
+			);
 			path = Kindled;
 			sourceTree = "<group>";
 		};
@@ -38,6 +61,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A01286362FAE159B00629E5A /* RevenueCatUI in Frameworks */,
+				A01281892FABD5FF00629E5A /* GoogleMobileAds in Frameworks */,
+				A012818B2FABD5FF00629E5A /* GoogleUserMessagingPlatform in Frameworks */,
+				A01286A02FAFCC7600629E5A /* FirebaseAnalytics in Frameworks */,
+				A01286342FAE159B00629E5A /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +87,7 @@
 				A0A7F8D02FA54E3F00BCE594 /* Kindled */,
 				A07078932FA60446009298AF /* Frameworks */,
 				A0A7F8CF2FA54E3F00BCE594 /* Products */,
+				A01286A32FAFCF9000629E5A /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,6 +120,11 @@
 			);
 			name = Kindled;
 			packageProductDependencies = (
+				A01281882FABD5FF00629E5A /* GoogleMobileAds */,
+				A012818A2FABD5FF00629E5A /* GoogleUserMessagingPlatform */,
+				A01286332FAE159B00629E5A /* RevenueCat */,
+				A01286352FAE159B00629E5A /* RevenueCatUI */,
+				A012869F2FAFCC7600629E5A /* FirebaseAnalytics */,
 			);
 			productName = Kindled;
 			productReference = A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */;
@@ -121,6 +155,12 @@
 			);
 			mainGroup = A0A7F8C52FA54E3F00BCE594;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A01281872FABD5FF00629E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				A012818C2FABD5FF00629E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
+				A01286322FAE159B00629E5A /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				A012869E2FAFCC7600629E5A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A0A7F8CF2FA54E3F00BCE594 /* Products */;
 			projectDirPath = "";
@@ -136,6 +176,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A01286A42FAFCF9000629E5A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,7 +325,9 @@
 				DEVELOPMENT_TEAM = 74233Z9998;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kindled/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kindled;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "The app uses personal data for ads";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -294,7 +337,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -322,7 +365,9 @@
 				DEVELOPMENT_TEAM = 74233Z9998;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kindled/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Kindled;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "The app uses personal data for ads";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -332,7 +377,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -371,6 +416,69 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A01281872FABD5FF00629E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.3.0;
+			};
+		};
+		A012818C2FABD5FF00629E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		A01286322FAE159B00629E5A /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.72.0;
+			};
+		};
+		A012869E2FAFCC7600629E5A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.13.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A01281882FABD5FF00629E5A /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A01281872FABD5FF00629E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		A012818A2FABD5FF00629E5A /* GoogleUserMessagingPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A012818C2FABD5FF00629E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+			productName = GoogleUserMessagingPlatform;
+		};
+		A01286332FAE159B00629E5A /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A01286322FAE159B00629E5A /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		A01286352FAE159B00629E5A /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A01286322FAE159B00629E5A /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
+		};
+		A012869F2FAFCC7600629E5A /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A012869E2FAFCC7600629E5A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A0A7F8C62FA54E3F00BCE594 /* Project object */;
 }

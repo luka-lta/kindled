@@ -16,6 +16,11 @@ struct ContentView: View {
     @State private var achievementManager = AchievementManager()
     @State private var rootID = UUID()
     @State private var selectedTab: Int = 0
+    @Query var habits: [Habit]
+
+    private var remainingToday: Int {
+        habits.filter { !$0.isCompletedToday }.count
+    }
 
     private var appLocale: Locale {
         appLanguage == "system" ? Locale.current : Locale(identifier: appLanguage)
@@ -38,6 +43,7 @@ struct ContentView: View {
             HomeView()
                 .id(rootID)
                 .tabItem { Label("Habits", systemImage: "checkmark.circle.fill") }
+                .badge(remainingToday)
                 .tag(0)
             StatisticsView()
                 .id(rootID)

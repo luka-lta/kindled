@@ -70,6 +70,7 @@
 "Rate" = "Rate";
 
 /* Achievements */
+"Next Goal" = "Next Goal";
 "Achievements" = "Achievements";
 "Achievement Unlocked!" = "Achievement Unlocked!";
 
@@ -102,6 +103,10 @@
 "3 habits with a streak of 7+" = "3 habits with a streak of 7+";
 
 /* Settings */
+"Your Name" = "Your Name";
+"Not set" = "Not set";
+"Used in your greeting on the home screen" = "Used in your greeting on the home screen";
+"Enter your name" = "Enter your name";
 "On" = "On";
 "Language" = "Language";
 "Settings" = "Settings";
@@ -146,6 +151,7 @@
 "Dark" = "Dark";
 
 /* Onboarding */
+"Your name (optional)" = "Your name (optional)";
 "Habit Tracker" = "Habit Tracker";
 "Build better habits, daily" = "Build better habits, daily";
 "Build Better Habits" = "Build Better Habits";

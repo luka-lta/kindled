@@ -17,7 +17,13 @@ struct HabitCard: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 18))
+        .background {
+            RoundedRectangle(cornerRadius: 18)
+                .fill(.regularMaterial)
+            RoundedRectangle(cornerRadius: 18)
+                .fill(habitColor.opacity(habit.isCompletedToday ? 0.07 : 0))
+                .animation(.easeInOut(duration: 0.25), value: habit.isCompletedToday)
+        }
         .overlay(alignment: .leading) {
             habitColor
                 .frame(width: 4)

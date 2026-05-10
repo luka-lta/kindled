@@ -117,16 +117,16 @@ struct LeaderboardRow: View {
     var body: some View {
         HStack(spacing: 14) {
             Text("#\(rank)")
-                .font(.system(size: 15, weight: .bold, design: .rounded))
+                .font(.system(size: rank == 1 ? 18 : 15, weight: .bold, design: .rounded))
                 .foregroundStyle(rankColor)
                 .frame(width: 32)
 
             ZStack {
                 Circle()
                     .fill(habitColor.opacity(0.15))
-                    .frame(width: 40, height: 40)
+                    .frame(width: rank == 1 ? 46 : 40, height: rank == 1 ? 46 : 40)
                 Image(systemName: habit.icon)
-                    .font(.system(size: 18))
+                    .font(.system(size: rank == 1 ? 21 : 18))
                     .foregroundStyle(habitColor)
             }
 
@@ -137,7 +137,12 @@ struct LeaderboardRow: View {
 
             StreakBadge(streak: habit.currentStreak)
         }
-        .padding(14)
+        .padding(rank == 1 ? 16 : 14)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(rank == 1 ? Color.yellow.opacity(0.5) : Color.clear, lineWidth: 1.5)
+        )
+        .shadow(color: rank == 1 ? Color.yellow.opacity(0.25) : .clear, radius: 8, y: 4)
     }
 }

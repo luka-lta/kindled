@@ -34,7 +34,9 @@ private let onboardingPages: [OnboardingPage] = [
 
 struct OnboardingView: View {
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    @AppStorage("userName") private var savedUserName: String = ""
     @State private var currentPage = 0
+    @State private var nameInput: String = ""
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -73,32 +75,46 @@ struct OnboardingView: View {
         let page = onboardingPages[currentPage]
         let buttonColor = page.gradient.first ?? .purple
 
-        return Button {
+        return VStack(spacing: 12) {
             if isLast {
-                hasSeenOnboarding = true
-            } else {
-                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                    currentPage += 1
-                }
+                TextField("Your name (optional)", text: $nameInput)
+                    .font(.system(size: 16))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 14)
+                    .background(.white.opacity(0.2), in: RoundedRectangle(cornerRadius: 14))
+                    .foregroundStyle(.white)
+                    .tint(.white)
+                    .submitLabel(.done)
             }
-        } label: {
-            HStack(spacing: 8) {
-                Text(isLast ? LocalizedStringKey("Get Started") : "Next")
-                    .font(.system(size: 17, weight: .bold))
-                if !isLast {
-                    Image(systemName: "arrow.right")
-                        .font(.system(size: 15, weight: .bold))
+
+            Button {
+                if isLast {
+                    savedUserName = nameInput.trimmingCharacters(in: .whitespaces)
+                    hasSeenOnboarding = true
                 } else {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 15, weight: .bold))
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                        currentPage += 1
+                    }
                 }
+            } label: {
+                HStack(spacing: 8) {
+                    Text(isLast ? LocalizedStringKey("Get Started") : "Next")
+                        .font(.system(size: 17, weight: .bold))
+                    if !isLast {
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 15, weight: .bold))
+                    } else {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 15, weight: .bold))
+                    }
+                }
+                .foregroundStyle(buttonColor)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 18)
+                .background(.white, in: RoundedRectangle(cornerRadius: 18))
             }
-            .foregroundStyle(buttonColor)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 18)
-            .background(.white, in: RoundedRectangle(cornerRadius: 18))
+            .buttonStyle(ScaleButtonStyle())
         }
-        .buttonStyle(ScaleButtonStyle())
     }
 }
 

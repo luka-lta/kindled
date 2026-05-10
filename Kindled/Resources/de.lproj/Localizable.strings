@@ -70,6 +70,7 @@
 "Rate" = "Rate";
 
 /* Achievements */
+"Next Goal" = "Nächstes Ziel";
 "Achievements" = "Erfolge";
 "Achievement Unlocked!" = "Erfolg freigeschaltet!";
 
@@ -102,6 +103,10 @@
 "3 habits with a streak of 7+" = "3 Gewohnheiten mit Streak von 7+";
 
 /* Settings */
+"Your Name" = "Dein Name";
+"Not set" = "Nicht gesetzt";
+"Used in your greeting on the home screen" = "Wird in deiner Begrüßung auf dem Startbildschirm verwendet";
+"Enter your name" = "Name eingeben";
 "On" = "Ein";
 "Language" = "Sprache";
 "Settings" = "Einstellungen";
@@ -146,6 +151,7 @@
 "Dark" = "Dunkel";
 
 /* Onboarding */
+"Your name (optional)" = "Dein Name (optional)";
 "Habit Tracker" = "Gewohnheits-Tracker";
 "Build better habits, daily" = "Bessere Gewohnheiten, täglich";
 "Build Better Habits" = "Bessere Gewohnheiten aufbauen";

@@ -41,3 +41,6 @@ Icon?
 
 # Previews
 *.preview/
+
+# Sensitive config
+GoogleService-Info.plist
