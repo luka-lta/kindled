@@ -10,6 +10,7 @@ struct HomeView: View {
     @Environment(AchievementManager.self) var achievementManager
     @Environment(AdManager.self) var adManager
     @Environment(ConsentManager.self) var consentManager
+    @Environment(SubscriptionManager.self) var subscriptionManager
     @State private var showAddHabit = false
     @State private var editHabit: Habit? = nil
     @State private var confettiFireID: UUID? = nil
@@ -249,7 +250,7 @@ struct HomeView: View {
         if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
         pendingNoteEntry = entry
 
-        adManager.recordCompletion()
+        adManager.recordCompletion(isProUnlocked: subscriptionManager.isProUnlocked)
 
         if streakMilestones.contains(habit.currentStreak) {
             confettiFireID = UUID()

@@ -102,6 +102,18 @@
 "Have habits in 3 different categories" = "Gewohnheiten in 3 verschiedenen Kategorien";
 "3 habits with a streak of 7+" = "3 Gewohnheiten mit Streak von 7+";
 
+/* Pro / Subscription */
+"Unlock Pro" = "Pro freischalten";
+"Kindled Pro" = "Kindled Pro";
+"All features unlocked" = "Alle Features freigeschaltet";
+"Active" = "Aktiv";
+"Manage subscription" = "Abonnement verwalten";
+"Heatmap, charts, notes & more" = "Heatmap, Charts, Notizen & mehr";
+"Upgrade to Pro" = "Upgrade auf Pro";
+"Year Overview" = "Jahres-Übersicht";
+"Notes Overview" = "Notizen-Übersicht";
+"Overall Charts" = "Gesamt-Charts";
+
 /* Settings */
 "Your Name" = "Dein Name";
 "Not set" = "Nicht gesetzt";

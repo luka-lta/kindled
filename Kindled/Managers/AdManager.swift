@@ -16,10 +16,10 @@ final class AdManager: NSObject {
         loadInterstitial()
     }
 
-    func recordCompletion() {
+    func recordCompletion(isProUnlocked: Bool = false) {
         let count = UserDefaults.standard.integer(forKey: Keys.completionCount) + 1
         UserDefaults.standard.set(count, forKey: Keys.completionCount)
-        if count % AdConstants.interstitialFrequency == 0 {
+        if !isProUnlocked, count % AdConstants.interstitialFrequency == 0 {
             showInterstitial()
         }
         if count >= AdConstants.reviewPromptThreshold,

@@ -35,6 +35,12 @@ struct HeatmapView: View {
     }
 
     var body: some View {
+        ProLockedView(title: "Year Overview") {
+            lockedContent
+        }
+    }
+
+    private var lockedContent: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text("Year Overview")

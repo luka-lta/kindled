@@ -8,6 +8,10 @@
 	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3346959869225055~3848694363</string>
+	<key>RevenueCatAPIKey</key>
+	<string>appl_OPNnTKepuauHalWQcpcIVNvGIDf</string>
+	<key>RevenueCatTestAPIKey</key>
+	<string>test_JGvDhgpVoarCvTXRHaYkqJiwdge</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict><key>SKAdNetworkIdentifier</key><string>cstr6suwn9.skadnetwork</string></dict>

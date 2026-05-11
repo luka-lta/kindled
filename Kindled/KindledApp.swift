@@ -23,13 +23,16 @@ struct KindledApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @State private var adManager = AdManager()
     @State private var consentManager = ConsentManager()
+    @State private var subscriptionManager = SubscriptionManager()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(adManager)
                 .environment(consentManager)
+                .environment(subscriptionManager)
                 .task {
+                    subscriptionManager.configure()
                     consentManager.requestConsentAndStart {
                         adManager.start()
                     }

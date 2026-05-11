@@ -3,6 +3,7 @@ import UserNotifications
 
 struct SettingsView: View {
     @Environment(\.themeColor) var themeColor
+    @Environment(SubscriptionManager.self) private var subscriptionManager
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
     @AppStorage(StorageKeys.hapticEnabled) private var hapticStored = true
     @AppStorage(StorageKeys.appAppearance) private var appearanceRaw: String = "System"
@@ -10,6 +11,7 @@ struct SettingsView: View {
     @AppStorage(StorageKeys.appLanguage) private var appLanguage: String = "system"
     @AppStorage(StorageKeys.userName) private var userName: String = ""
     @State private var showNameEditor = false
+    @State private var showPaywall = false
 
     private var currentLanguageLabel: String {
         switch appLanguage {
@@ -24,6 +26,7 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     appHeaderCard
+                    subscriptionCard
                     personalizationCard
                     notificationsCard
                     preferencesCard
@@ -70,6 +73,130 @@ struct SettingsView: View {
         }
         .padding(20)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+    }
+
+    // MARK: - Subscription
+
+    @ViewBuilder
+    private var subscriptionCard: some View {
+        if subscriptionManager.isProUnlocked {
+            proActiveCard
+        } else {
+            proUpgradeCard
+        }
+    }
+
+    private var proActiveCard: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(LinearGradient(
+                            colors: [.yellow, .orange],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ))
+                        .frame(width: 40, height: 40)
+                    Image(systemName: "crown.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.white)
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Kindled Pro")
+                        .font(.headline)
+                    Text("All features unlocked")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Label("Active", systemImage: "checkmark.circle.fill")
+                    .font(.caption.bold())
+                    .foregroundStyle(.green)
+            }
+
+            Divider()
+
+            Button {
+                if let url = URL(string: "itms-apps://apps.apple.com/account/subscriptions") {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "creditcard.fill")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.orange)
+                        .frame(width: 28)
+                    Text("Manage subscription")
+                        .font(.subheadline)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption.bold())
+                        .foregroundStyle(.tertiary)
+                }
+                .foregroundStyle(.primary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(20)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .strokeBorder(
+                    LinearGradient(colors: [.yellow.opacity(0.6), .orange.opacity(0.3)], startPoint: .topLeading, endPoint: .bottomTrailing),
+                    lineWidth: 1.5
+                )
+        )
+    }
+
+    private var proUpgradeCard: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(LinearGradient(
+                            colors: [.purple, .indigo],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ))
+                        .frame(width: 40, height: 40)
+                    Image(systemName: "crown.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(.white)
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Kindled Pro")
+                        .font(.headline)
+                    Text("Heatmap, charts, notes & more")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+            }
+
+            Button {
+                showPaywall = true
+            } label: {
+                Text("Upgrade to Pro")
+                    .font(.subheadline.bold())
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(
+                        LinearGradient(colors: [.purple, .indigo], startPoint: .leading, endPoint: .trailing),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+                    .foregroundStyle(.white)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(20)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .strokeBorder(.purple.opacity(0.3), lineWidth: 1.5)
+        )
+        .sheet(isPresented: $showPaywall) {
+            KindledPaywallView()
+        }
     }
 
     // MARK: - Personalization
