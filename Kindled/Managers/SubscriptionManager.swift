@@ -26,6 +26,9 @@ final class SubscriptionManager {
         Purchases.configure(withAPIKey: Self.apiKey)
         Task { @MainActor in
             await refreshEntitlement()
+            for await info in Purchases.shared.customerInfoStream {
+                isProUnlocked = info.entitlements[Self.entitlementID]?.isActive == true
+            }
         }
     }
 

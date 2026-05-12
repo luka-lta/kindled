@@ -9,17 +9,11 @@ struct KindledPaywallView: View {
         PaywallView(displayCloseButton: true)
             .onPurchaseCompleted { customerInfo in
                 subscriptionManager.handleCustomerInfo(customerInfo)
-                Task {
-                    await subscriptionManager.refreshEntitlement()
-                    dismiss()
-                }
+                dismiss()
             }
             .onRestoreCompleted { customerInfo in
                 subscriptionManager.handleCustomerInfo(customerInfo)
-                Task {
-                    await subscriptionManager.refreshEntitlement()
-                    if subscriptionManager.isProUnlocked { dismiss() }
-                }
+                dismiss()
             }
     }
 }
