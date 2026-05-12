@@ -3,7 +3,8 @@
 "Good Afternoon" = "Guten Tag";
 "Good Evening" = "Guten Abend";
 
-/* Timeline */
+/* Timeline / Default View */
+"Default View" = "Standardansicht";
 "Timeline" = "Zeitstrahl";
 "Scheduled Time" = "Geplante Zeit";
 "Unscheduled" = "Nicht geplant";

@@ -9,4 +9,5 @@ enum StorageKeys {
     static let hapticEnabled = "hapticEnabled"
     static let adCompletionCount = "habitCompletionCount"
     static let reviewRequested = "reviewRequested"
+    static let defaultHomeView = "defaultHomeView"
 }

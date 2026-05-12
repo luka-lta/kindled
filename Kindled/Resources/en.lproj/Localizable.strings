@@ -3,7 +3,8 @@
 "Good Afternoon" = "Good Afternoon";
 "Good Evening" = "Good Evening";
 
-/* Timeline */
+/* Timeline / Default View */
+"Default View" = "Default View";
 "Timeline" = "Timeline";
 "Scheduled Time" = "Scheduled Time";
 "Unscheduled" = "Unscheduled";
