@@ -105,12 +105,19 @@ final class Habit {
         let start = calendar.startOfDay(for: createdDate)
         let totalDays = (calendar.dateComponents([.day], from: start, to: today).day ?? 0) + 1
         let denominator: Int
+        let completedCount: Int
         if frequency == .weekly {
             denominator = max((totalDays + 6) / 7, 1)
+            let completedWeeks = Set(entries.filter { $0.isCompleted }.map { entry in
+                let c = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: entry.completedDate)
+                return "\(c.yearForWeekOfYear ?? 0)-\(c.weekOfYear ?? 0)"
+            })
+            completedCount = completedWeeks.count
         } else {
             denominator = max(totalDays, 1)
+            completedCount = entries.filter { $0.isCompleted }.count
         }
-        return Double(entries.filter { $0.isCompleted }.count) / Double(denominator)
+        return min(Double(completedCount) / Double(denominator), 1.0)
     }
 
     var isCompletedToday: Bool {
