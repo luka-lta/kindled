@@ -22,6 +22,7 @@ struct HomeView: View {
     @AppStorage(StorageKeys.hapticEnabled) private var hapticEnabled = true
     @AppStorage(StorageKeys.userName) private var userName: String = ""
     @State private var emptyPulse = false
+    @State private var showTimeline = false
 
     private var filteredHabits: [Habit] {
         guard let category = selectedCategory else { return habits }
@@ -35,59 +36,76 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                headerCard
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 4, trailing: 20))
-
-                categoryFilterBar
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
-
-                if habits.isEmpty {
-                    emptyState
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                } else if filteredHabits.isEmpty {
-                    filteredEmptyState
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
+            Group {
+                if showTimeline {
+                    DailyTimelineView(habits: habits, onToggle: toggleHabit)
                 } else {
-                    ForEach(filteredHabits) { habit in
-                        NavigationLink(destination: HabitDetailView(habit: habit)) {
-                            HabitCard(habit: habit) {
-                                toggleHabit(habit)
+                    List {
+                        headerCard
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 4, trailing: 20))
+
+                        categoryFilterBar
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
+
+                        if habits.isEmpty {
+                            emptyState
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                        } else if filteredHabits.isEmpty {
+                            filteredEmptyState
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                        } else {
+                            ForEach(filteredHabits) { habit in
+                                NavigationLink(destination: HabitDetailView(habit: habit)) {
+                                    HabitCard(habit: habit) {
+                                        toggleHabit(habit)
+                                    }
+                                }
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                                .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
+                                .contextMenu {
+                                    Button { editHabit = habit } label: {
+                                        Label("Edit", systemImage: "pencil")
+                                    }
+                                    Button(role: .destructive) { deleteHabit(habit) } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
                             }
-                        }
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
-                        .contextMenu {
-                            Button { editHabit = habit } label: {
-                                Label("Edit", systemImage: "pencil")
-                            }
-                            Button(role: .destructive) { deleteHabit(habit) } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
+                            .onMove(perform: moveHabitsIfUnfiltered)
+                            .onDelete(perform: deleteHabits)
                         }
                     }
-                    .onMove(perform: moveHabitsIfUnfiltered)
-                    .onDelete(perform: deleteHabits)
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
                 }
             }
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Habits")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    EditButton()
-                        .foregroundStyle(themeColor)
-                        .opacity(habits.isEmpty ? 0 : 1)
-                        .disabled(habits.isEmpty)
+                    if !showTimeline {
+                        EditButton()
+                            .foregroundStyle(themeColor)
+                            .opacity(habits.isEmpty ? 0 : 1)
+                            .disabled(habits.isEmpty)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) { showTimeline.toggle() }
+                    } label: {
+                        Image(systemName: showTimeline ? "list.bullet" : "clock")
+                            .font(.title3)
+                            .foregroundStyle(themeColor)
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {

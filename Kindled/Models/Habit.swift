@@ -15,6 +15,7 @@ final class Habit {
     var frequency: HabitFrequency
     var categoryRaw: String = HabitCategory.health.rawValue
     var createdDate: Date
+    var scheduledTime: Date?
 
     var category: HabitCategory {
         get { HabitCategory(rawValue: categoryRaw) ?? .health }
@@ -31,7 +32,8 @@ final class Habit {
         colorHex: String = "#6C63FF",
         frequency: HabitFrequency = .daily,
         category: HabitCategory = .health,
-        sortOrder: Int = 0
+        sortOrder: Int = 0,
+        scheduledTime: Date? = nil
     ) {
         self.id = UUID()
         self.title = title
@@ -41,6 +43,7 @@ final class Habit {
         self.categoryRaw = category.rawValue
         self.createdDate = Date()
         self.sortOrder = sortOrder
+        self.scheduledTime = scheduledTime
         self.entries = []
         self.reminders = []
     }

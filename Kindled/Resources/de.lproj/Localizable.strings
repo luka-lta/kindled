@@ -3,6 +3,14 @@
 "Good Afternoon" = "Guten Tag";
 "Good Evening" = "Guten Abend";
 
+/* Timeline */
+"Timeline" = "Zeitstrahl";
+"Scheduled Time" = "Geplante Zeit";
+"Unscheduled" = "Nicht geplant";
+"No habits scheduled" = "Keine Gewohnheiten geplant";
+"Now" = "Jetzt";
+"Weekly Reminder" = "Wöchentliche Erinnerung";
+
 /* Home */
 "No habits yet" = "Noch keine Gewohnheiten";
 "Tap + to add your first habit" = "Tippe auf +, um deine erste Gewohnheit hinzuzufügen";

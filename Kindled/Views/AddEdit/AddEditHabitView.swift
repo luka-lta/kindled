@@ -17,6 +17,10 @@ struct AddEditHabitView: View {
     @State private var reminderTime = Calendar.current.date(
         bySettingHour: 9, minute: 0, second: 0, of: Date()
     ) ?? Date()
+    @State private var scheduledTimeEnabled = false
+    @State private var scheduledTimeValue = Calendar.current.date(
+        bySettingHour: 8, minute: 0, second: 0, of: Date()
+    ) ?? Date()
 
     private let palette = [
         "#6C63FF", "#FF6B6B", "#4ECDC4", "#45B7D1",
@@ -276,10 +280,47 @@ struct AddEditHabitView: View {
                     .frame(maxWidth: .infinity)
                     .transition(.move(edge: .top).combined(with: .opacity))
             }
+
+            Divider()
+
+            HStack {
+                HStack(spacing: 12) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.blue)
+                            .frame(width: 32, height: 32)
+                        Image(systemName: "clock.fill")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(LocalizedStringKey("Scheduled Time"))
+                            .font(.subheadline)
+                        (scheduledTimeEnabled
+                            ? Text(verbatim: scheduledTimeValue.formatted(date: .omitted, time: .shortened))
+                            : Text(LocalizedStringKey("Off")))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                Spacer()
+                Toggle("", isOn: $scheduledTimeEnabled)
+                    .labelsHidden()
+                    .tint(accentColor)
+            }
+
+            if scheduledTimeEnabled {
+                DatePicker("", selection: $scheduledTimeValue, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
+                    .frame(maxWidth: .infinity)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
         }
         .padding(20)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: reminderEnabled)
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: scheduledTimeEnabled)
     }
 
     // MARK: - Helpers
@@ -324,6 +365,10 @@ struct AddEditHabitView: View {
             comps.minute = reminder.minute
             reminderTime = Calendar.current.date(from: comps) ?? Date()
         }
+        if let st = habit.scheduledTime {
+            scheduledTimeEnabled = true
+            scheduledTimeValue = st
+        }
     }
 
     private func save() {
@@ -334,6 +379,7 @@ struct AddEditHabitView: View {
             existing.colorHex = selectedColor
             existing.frequency = frequency
             existing.category = selectedCategory
+            existing.scheduledTime = scheduledTimeEnabled ? scheduledTimeValue : nil
             habit = existing
         } else {
             habit = Habit(
@@ -342,7 +388,8 @@ struct AddEditHabitView: View {
                 colorHex: selectedColor,
                 frequency: frequency,
                 category: selectedCategory,
-                sortOrder: allHabits.count
+                sortOrder: allHabits.count,
+                scheduledTime: scheduledTimeEnabled ? scheduledTimeValue : nil
             )
             modelContext.insert(habit)
         }
