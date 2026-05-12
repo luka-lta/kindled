@@ -68,10 +68,11 @@ final class AchievementManager {
         case "category_explorer":  return min(Double(Set(habits.map { $0.category }).count), 3) / 3
         case "on_fire":            return min(Double(habits.filter { $0.currentStreak >= 7 }.count), 3) / 3
         case "perfect_day":
-            guard !habits.isEmpty else { return 0 }
+            let dailyHabits = habits.filter { $0.frequency == .daily }
+            guard !dailyHabits.isEmpty else { return 0 }
             let today = calendar.startOfDay(for: Date())
-            let done = habits.filter { h in h.entries.contains { $0.isCompleted && calendar.startOfDay(for: $0.completedDate) == today } }.count
-            return Double(done) / Double(habits.count)
+            let done = dailyHabits.filter { h in h.entries.contains { $0.isCompleted && calendar.startOfDay(for: $0.completedDate) == today } }.count
+            return Double(done) / Double(dailyHabits.count)
         default: return 0
         }
     }
@@ -94,10 +95,11 @@ final class AchievementManager {
         case "category_explorer":  return "\(min(Set(habits.map { $0.category }).count, 3)) / 3 categories"
         case "on_fire":            return "\(min(habits.filter { $0.currentStreak >= 7 }.count, 3)) / 3 habits"
         case "perfect_day":
-            guard !habits.isEmpty else { return "0 / 0" }
+            let dailyHabits = habits.filter { $0.frequency == .daily }
+            guard !dailyHabits.isEmpty else { return "0 / 0" }
             let today = calendar.startOfDay(for: Date())
-            let done = habits.filter { h in h.entries.contains { $0.isCompleted && calendar.startOfDay(for: $0.completedDate) == today } }.count
-            return "\(done) / \(habits.count) today"
+            let done = dailyHabits.filter { h in h.entries.contains { $0.isCompleted && calendar.startOfDay(for: $0.completedDate) == today } }.count
+            return "\(done) / \(dailyHabits.count) today"
         default: return ""
         }
     }
@@ -136,9 +138,10 @@ final class AchievementManager {
             return habits.count >= 5
 
         case "perfect_day":
-            guard !habits.isEmpty else { return false }
+            let dailyHabits = habits.filter { $0.frequency == .daily }
+            guard !dailyHabits.isEmpty else { return false }
             let today = calendar.startOfDay(for: Date())
-            return habits.allSatisfy { habit in
+            return dailyHabits.allSatisfy { habit in
                 habit.entries.contains {
                     $0.isCompleted && calendar.startOfDay(for: $0.completedDate) == today
                 }

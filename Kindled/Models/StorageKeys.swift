@@ -7,4 +7,6 @@ enum StorageKeys {
     static let hasSeenOnboarding = "hasSeenOnboarding"
     static let userName = "userName"
     static let hapticEnabled = "hapticEnabled"
+    static let adCompletionCount = "habitCompletionCount"
+    static let reviewRequested = "reviewRequested"
 }
