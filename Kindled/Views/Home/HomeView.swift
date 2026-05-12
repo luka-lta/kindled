@@ -181,10 +181,12 @@ struct HomeView: View {
             ForEach(tlItems) { item in
                 switch item {
                 case .habit(let h):
-                    tlHabitRow(h)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 2, leading: 20, bottom: 2, trailing: 20))
+                    NavigationLink(destination: HabitDetailView(habit: h)) {
+                        tlHabitRow(h)
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 2, leading: 20, bottom: 2, trailing: 20))
                 case .nowMarker:
                     tlNowLine
                         .listRowBackground(Color.clear)
@@ -200,10 +202,12 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
                     .listRowInsets(EdgeInsets(top: 16, leading: 20, bottom: 4, trailing: 20))
                 ForEach(tlUnscheduled) { h in
-                    tlHabitRow(h, isUnscheduled: true)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 2, leading: 20, bottom: 2, trailing: 20))
+                    NavigationLink(destination: HabitDetailView(habit: h)) {
+                        tlHabitRow(h, isUnscheduled: true)
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 2, leading: 20, bottom: 2, trailing: 20))
                 }
             }
         }
