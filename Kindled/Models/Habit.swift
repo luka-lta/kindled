@@ -47,6 +47,7 @@ final class Habit {
 
     var currentStreak: Int {
         let calendar = Calendar.current
+        let step = frequency == .weekly ? -7 : -1
         let completedDates = entries
             .filter { $0.isCompleted }
             .map { calendar.startOfDay(for: $0.completedDate) }
@@ -56,16 +57,16 @@ final class Habit {
 
         var checkDate = calendar.startOfDay(for: Date())
         if !completedDates.contains(checkDate) {
-            guard let yesterday = calendar.date(byAdding: .day, value: -1, to: checkDate),
-                  completedDates.contains(yesterday) else { return 0 }
-            checkDate = yesterday
+            guard let prev = calendar.date(byAdding: .day, value: step, to: checkDate),
+                  completedDates.contains(prev) else { return 0 }
+            checkDate = prev
         }
 
         var streak = 0
         for date in completedDates {
             if date == checkDate {
                 streak += 1
-                guard let nextDate = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+                guard let nextDate = calendar.date(byAdding: .day, value: step, to: checkDate) else { break }
                 checkDate = nextDate
             } else if date < checkDate {
                 break
@@ -76,6 +77,7 @@ final class Habit {
 
     var longestStreak: Int {
         let calendar = Calendar.current
+        let expectedDiff = frequency == .weekly ? 7 : 1
         let sortedDates = Array(Set(entries
             .filter { $0.isCompleted }
             .map { calendar.startOfDay(for: $0.completedDate) }))
@@ -87,10 +89,10 @@ final class Habit {
         var current = 1
         for i in 1..<sortedDates.count {
             let diff = calendar.dateComponents([.day], from: sortedDates[i - 1], to: sortedDates[i]).day ?? 0
-            if diff == 1 {
+            if diff == expectedDiff {
                 current += 1
                 longest = max(longest, current)
-            } else if diff > 1 {
+            } else if diff > expectedDiff {
                 current = 1
             }
         }
@@ -101,8 +103,21 @@ final class Habit {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let start = calendar.startOfDay(for: createdDate)
-        let days = (calendar.dateComponents([.day], from: start, to: today).day ?? 0) + 1
-        return Double(entries.filter { $0.isCompleted }.count) / Double(max(days, 1))
+        let totalDays = (calendar.dateComponents([.day], from: start, to: today).day ?? 0) + 1
+        let denominator: Int
+        let completedCount: Int
+        if frequency == .weekly {
+            denominator = max((totalDays + 6) / 7, 1)
+            let completedWeeks = Set(entries.filter { $0.isCompleted }.map { entry in
+                let c = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: entry.completedDate)
+                return "\(c.yearForWeekOfYear ?? 0)-\(c.weekOfYear ?? 0)"
+            })
+            completedCount = completedWeeks.count
+        } else {
+            denominator = max(totalDays, 1)
+            completedCount = entries.filter { $0.isCompleted }.count
+        }
+        return min(Double(completedCount) / Double(denominator), 1.0)
     }
 
     var isCompletedToday: Bool {

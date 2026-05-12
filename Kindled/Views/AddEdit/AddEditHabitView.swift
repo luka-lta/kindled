@@ -256,7 +256,7 @@ struct AddEditHabitView: View {
                             .foregroundStyle(.white)
                     }
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Daily Reminder")
+                        Text(frequency == .weekly ? "Weekly Reminder" : "Daily Reminder")
                             .font(.subheadline)
                         (reminderEnabled ? Text(verbatim: reminderTime.formatted(date: .omitted, time: .shortened)) : Text("Off"))
                             .font(.caption)

@@ -7,25 +7,20 @@ final class AdManager: NSObject {
     private var interstitial: InterstitialAd?
     private var isLoading = false
 
-    private enum Keys {
-        static let completionCount = "habitCompletionCount"
-        static let reviewRequested = "reviewRequested"
-    }
-
     func start() {
         loadInterstitial()
     }
 
     func recordCompletion(isProUnlocked: Bool = false) {
-        let count = UserDefaults.standard.integer(forKey: Keys.completionCount) + 1
-        UserDefaults.standard.set(count, forKey: Keys.completionCount)
+        let count = UserDefaults.standard.integer(forKey: StorageKeys.adCompletionCount) + 1
+        UserDefaults.standard.set(count, forKey: StorageKeys.adCompletionCount)
         if !isProUnlocked, count % AdConstants.interstitialFrequency == 0 {
             showInterstitial()
         }
         if count >= AdConstants.reviewPromptThreshold,
-           !UserDefaults.standard.bool(forKey: Keys.reviewRequested) {
+           !UserDefaults.standard.bool(forKey: StorageKeys.reviewRequested) {
             requestReview()
-            UserDefaults.standard.set(true, forKey: Keys.reviewRequested)
+            UserDefaults.standard.set(true, forKey: StorageKeys.reviewRequested)
         }
     }
 
