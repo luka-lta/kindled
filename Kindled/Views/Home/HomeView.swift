@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Combine
 
 private let streakMilestones = Set([7, 30, 100])
 
@@ -11,6 +12,7 @@ struct HomeView: View {
     @Environment(AdManager.self) var adManager
     @Environment(ConsentManager.self) var consentManager
     @Environment(SubscriptionManager.self) var subscriptionManager
+    @AppStorage(StorageKeys.defaultHomeView) private var showTimeline: Bool = false
     @State private var showAddHabit = false
     @State private var editHabit: Habit? = nil
     @State private var confettiFireID: UUID? = nil
@@ -22,6 +24,61 @@ struct HomeView: View {
     @AppStorage(StorageKeys.hapticEnabled) private var hapticEnabled = true
     @AppStorage(StorageKeys.userName) private var userName: String = ""
     @State private var emptyPulse = false
+    @State private var tlNow = Date()
+    private let tlClock = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+
+    private static let tlTimeFmt: DateFormatter = {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        f.dateStyle = .none
+        return f
+    }()
+
+    // MARK: - Timeline helpers
+
+    private func tlMinutes(_ date: Date) -> Int {
+        let c = Calendar.current.dateComponents([.hour, .minute], from: date)
+        return (c.hour ?? 0) * 60 + (c.minute ?? 0)
+    }
+
+    private var tlNowMinutes: Int { tlMinutes(tlNow) }
+
+    private var tlScheduled: [Habit] {
+        habits
+            .filter { $0.scheduledTime != nil }
+            .sorted { tlMinutes($0.scheduledTime!) < tlMinutes($1.scheduledTime!) }
+    }
+
+    private var tlUnscheduled: [Habit] {
+        habits.filter { $0.scheduledTime == nil }
+    }
+
+    private enum TLItem: Identifiable {
+        case habit(Habit)
+        case nowMarker
+        var id: String {
+            switch self {
+            case .habit(let h): return h.id.uuidString
+            case .nowMarker: return "now"
+            }
+        }
+    }
+
+    private var tlItems: [TLItem] {
+        var result: [TLItem] = []
+        var inserted = false
+        for habit in tlScheduled {
+            if !inserted && tlMinutes(habit.scheduledTime!) > tlNowMinutes {
+                result.append(.nowMarker)
+                inserted = true
+            }
+            result.append(.habit(habit))
+        }
+        if !inserted { result.append(.nowMarker) }
+        return result
+    }
+
+    // MARK: - List helpers
 
     private var filteredHabits: [Habit] {
         guard let category = selectedCategory else { return habits }
@@ -33,6 +90,8 @@ struct HomeView: View {
         return Double(habits.filter { $0.isCompletedToday }.count) / Double(habits.count)
     }
 
+    // MARK: - Body
+
     var body: some View {
         NavigationStack {
             List {
@@ -41,40 +100,17 @@ struct HomeView: View {
                     .listRowSeparator(.hidden)
                     .listRowInsets(EdgeInsets(top: 8, leading: 20, bottom: 4, trailing: 20))
 
-                categoryFilterBar
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
+                if !showTimeline {
+                    categoryFilterBar
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 4, trailing: 0))
+                }
 
-                if habits.isEmpty {
-                    emptyState
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                } else if filteredHabits.isEmpty {
-                    filteredEmptyState
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
+                if showTimeline {
+                    timelineContent
                 } else {
-                    ForEach(filteredHabits) { habit in
-                        NavigationLink(destination: HabitDetailView(habit: habit)) {
-                            HabitCard(habit: habit) {
-                                toggleHabit(habit)
-                            }
-                        }
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
-                        .contextMenu {
-                            Button { editHabit = habit } label: {
-                                Label("Edit", systemImage: "pencil")
-                            }
-                            Button(role: .destructive) { deleteHabit(habit) } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                        }
-                    }
-                    .onMove(perform: moveHabitsIfUnfiltered)
-                    .onDelete(perform: deleteHabits)
+                    habitListContent
                 }
             }
             .listStyle(.plain)
@@ -84,53 +120,196 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    EditButton()
-                        .foregroundStyle(themeColor)
-                        .opacity(habits.isEmpty ? 0 : 1)
-                        .disabled(habits.isEmpty)
+                    if !showTimeline {
+                        EditButton()
+                            .foregroundStyle(themeColor)
+                            .opacity(habits.isEmpty ? 0 : 1)
+                            .disabled(habits.isEmpty)
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        showAddHabit = true
+                        withAnimation(.easeInOut(duration: 0.2)) { showTimeline.toggle() }
                     } label: {
+                        Image(systemName: showTimeline ? "list.bullet" : "clock")
+                            .font(.title3)
+                            .foregroundStyle(themeColor)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showAddHabit = true } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
                             .foregroundStyle(themeColor)
                     }
                 }
             }
-            .sheet(isPresented: $showAddHabit) {
-                AddEditHabitView()
-            }
-            .sheet(item: $editHabit) { habit in
-                AddEditHabitView(editHabit: habit)
-            }
-            .sheet(item: $pendingNoteEntry) { entry in
-                NoteEntryView(entry: entry)
-            }
+            .sheet(isPresented: $showAddHabit) { AddEditHabitView() }
+            .sheet(item: $editHabit) { habit in AddEditHabitView(editHabit: habit) }
+            .sheet(item: $pendingNoteEntry) { entry in NoteEntryView(entry: entry) }
             .safeAreaInset(edge: .bottom) {
                 if consentManager.canShowAds {
-                    BannerAdView()
-                        .frame(height: BannerAdView.height)
+                    BannerAdView().frame(height: BannerAdView.height)
                 }
             }
             .overlay { ConfettiOverlay(fireID: confettiFireID) }
             .overlay(alignment: .top) {
                 if let achievement = visibleAchievement {
-                    AchievementBanner(achievement: achievement) {
-                        dismissBanner()
-                    }
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .padding(.top, 8)
-                    .zIndex(10)
+                    AchievementBanner(achievement: achievement) { dismissBanner() }
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .padding(.top, 8)
+                        .zIndex(10)
                 }
             }
+            .onReceive(tlClock) { tlNow = $0 }
             .onDisappear {
                 bannerTask?.cancel()
                 bannerTask = nil
             }
         }
     }
+
+    // MARK: - Timeline rows
+
+    @ViewBuilder
+    private var timelineContent: some View {
+        if habits.isEmpty {
+            emptyState
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        } else {
+            ForEach(tlItems) { item in
+                switch item {
+                case .habit(let h):
+                    NavigationLink(destination: HabitDetailView(habit: h)) {
+                        tlHabitRow(h)
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 2, leading: 20, bottom: 2, trailing: 20))
+                case .nowMarker:
+                    tlNowLine
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20))
+                }
+            }
+            if !tlUnscheduled.isEmpty {
+                Text(LocalizedStringKey("Unscheduled"))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 16, leading: 20, bottom: 4, trailing: 20))
+                ForEach(tlUnscheduled) { h in
+                    NavigationLink(destination: HabitDetailView(habit: h)) {
+                        tlHabitRow(h, isUnscheduled: true)
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 2, leading: 20, bottom: 2, trailing: 20))
+                }
+            }
+        }
+    }
+
+    private var tlNowLine: some View {
+        HStack(spacing: 10) {
+            Text(LocalizedStringKey("Now"))
+                .font(.caption.bold())
+                .foregroundStyle(themeColor)
+                .frame(width: 54, alignment: .trailing)
+            Rectangle()
+                .fill(themeColor)
+                .frame(height: 2)
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func tlHabitRow(_ habit: Habit, isUnscheduled: Bool = false) -> some View {
+        HStack(spacing: 10) {
+            Group {
+                if isUnscheduled {
+                    Text("—")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                } else if let st = habit.scheduledTime {
+                    Text(verbatim: Self.tlTimeFmt.string(from: st))
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("")
+                }
+            }
+            .frame(width: 54, alignment: .trailing)
+
+            Circle()
+                .fill(habit.isCompletedToday
+                    ? (Color(hex: habit.colorHex) ?? themeColor)
+                    : Color(.tertiaryLabel))
+                .frame(width: 10, height: 10)
+
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill((Color(hex: habit.colorHex) ?? themeColor)
+                        .opacity(habit.isCompletedToday ? 1.0 : 0.15))
+                    .frame(width: 32, height: 32)
+                Image(systemName: habit.icon)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(habit.isCompletedToday ? .white : (Color(hex: habit.colorHex) ?? themeColor))
+            }
+
+            Text(habit.title)
+                .font(.subheadline)
+                .strikethrough(habit.isCompletedToday, color: .secondary)
+                .foregroundStyle(habit.isCompletedToday ? .secondary : .primary)
+                .lineLimit(1)
+
+            Spacer()
+
+            Button { toggleHabit(habit) } label: {
+                Image(systemName: habit.isCompletedToday ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(habit.isCompletedToday
+                        ? (Color(hex: habit.colorHex) ?? themeColor)
+                        : .secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.vertical, 6)
+    }
+
+    // MARK: - Habit list rows
+
+    @ViewBuilder
+    private var habitListContent: some View {
+        if habits.isEmpty {
+            emptyState
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        } else if filteredHabits.isEmpty {
+            filteredEmptyState
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+        } else {
+            ForEach(filteredHabits) { habit in
+                NavigationLink(destination: HabitDetailView(habit: habit)) {
+                    HabitCard(habit: habit) { toggleHabit(habit) }
+                }
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
+                .contextMenu {
+                    Button { editHabit = habit } label: { Label("Edit", systemImage: "pencil") }
+                    Button(role: .destructive) { deleteHabit(habit) } label: { Label("Delete", systemImage: "trash") }
+                }
+            }
+            .onMove(perform: moveHabitsIfUnfiltered)
+            .onDelete(perform: deleteHabits)
+        }
+    }
+
+    // MARK: - Header card
 
     private var headerCard: some View {
         HStack(alignment: .center, spacing: 20) {
@@ -227,6 +406,8 @@ struct HomeView: View {
         let name = userName.trimmingCharacters(in: .whitespaces)
         return name.isEmpty ? Text(base) : Text(base) + Text(", \(name)")
     }
+
+    // MARK: - Actions
 
     private func toggleHabit(_ habit: Habit) {
         let calendar = Calendar.current

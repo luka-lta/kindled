@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Environment(SubscriptionManager.self) private var subscriptionManager
     @State private var notificationStatus: UNAuthorizationStatus = .notDetermined
     @AppStorage(StorageKeys.hapticEnabled) private var hapticStored = true
+    @AppStorage(StorageKeys.defaultHomeView) private var defaultTimeline: Bool = false
     @AppStorage(StorageKeys.appAppearance) private var appearanceRaw: String = "System"
     @AppStorage(StorageKeys.appTheme) private var themeRaw: String = "Purple"
     @AppStorage(StorageKeys.appLanguage) private var appLanguage: String = "system"
@@ -322,6 +323,21 @@ struct SettingsView: View {
                 )
                 Spacer()
                 Toggle("", isOn: $hapticStored)
+                    .labelsHidden()
+                    .tint(themeColor)
+            }
+
+            Divider()
+
+            HStack(alignment: .center) {
+                settingRow(
+                    icon: "clock.fill",
+                    iconColor: .blue,
+                    title: "Default View",
+                    subtitle: "Timeline"
+                )
+                Spacer()
+                Toggle("", isOn: $defaultTimeline)
                     .labelsHidden()
                     .tint(themeColor)
             }

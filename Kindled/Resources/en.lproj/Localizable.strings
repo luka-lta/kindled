@@ -3,6 +3,15 @@
 "Good Afternoon" = "Good Afternoon";
 "Good Evening" = "Good Evening";
 
+/* Timeline / Default View */
+"Default View" = "Default View";
+"Timeline" = "Timeline";
+"Scheduled Time" = "Scheduled Time";
+"Unscheduled" = "Unscheduled";
+"No habits scheduled" = "No habits scheduled";
+"Now" = "Now";
+"Weekly Reminder" = "Weekly Reminder";
+
 /* Home */
 "No habits yet" = "No habits yet";
 "Tap + to add your first habit" = "Tap + to add your first habit";
