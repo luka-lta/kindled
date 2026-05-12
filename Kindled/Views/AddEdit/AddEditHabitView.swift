@@ -249,78 +249,58 @@ struct AddEditHabitView: View {
 
             Divider()
 
-            HStack {
-                HStack(spacing: 12) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.orange)
-                            .frame(width: 32, height: 32)
-                        Image(systemName: "bell.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(frequency == .weekly ? "Weekly Reminder" : "Daily Reminder")
-                            .font(.subheadline)
-                        (reminderEnabled ? Text(verbatim: reminderTime.formatted(date: .omitted, time: .shortened)) : Text("Off"))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+            HStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.orange)
+                        .frame(width: 32, height: 32)
+                    Image(systemName: "bell.fill")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.white)
                 }
+                Text(frequency == .weekly ? "Weekly Reminder" : "Daily Reminder")
+                    .font(.subheadline)
                 Spacer()
+                if reminderEnabled {
+                    DatePicker("", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                        .datePickerStyle(.compact)
+                        .labelsHidden()
+                        .tint(accentColor)
+                }
                 Toggle("", isOn: $reminderEnabled)
                     .labelsHidden()
                     .tint(accentColor)
             }
 
-            if reminderEnabled {
-                DatePicker("", selection: $reminderTime, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .frame(maxWidth: .infinity)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-            }
-
             Divider()
 
-            HStack {
-                HStack(spacing: 12) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.blue)
-                            .frame(width: 32, height: 32)
-                        Image(systemName: "clock.fill")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.white)
-                    }
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(LocalizedStringKey("Scheduled Time"))
-                            .font(.subheadline)
-                        (scheduledTimeEnabled
-                            ? Text(verbatim: scheduledTimeValue.formatted(date: .omitted, time: .shortened))
-                            : Text(LocalizedStringKey("Off")))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+            HStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.blue)
+                        .frame(width: 32, height: 32)
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.white)
                 }
+                Text(LocalizedStringKey("Scheduled Time"))
+                    .font(.subheadline)
                 Spacer()
+                if scheduledTimeEnabled {
+                    DatePicker("", selection: $scheduledTimeValue, displayedComponents: .hourAndMinute)
+                        .datePickerStyle(.compact)
+                        .labelsHidden()
+                        .tint(accentColor)
+                }
                 Toggle("", isOn: $scheduledTimeEnabled)
                     .labelsHidden()
                     .tint(accentColor)
             }
-
-            if scheduledTimeEnabled {
-                DatePicker("", selection: $scheduledTimeValue, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .frame(maxWidth: .infinity)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-            }
         }
         .padding(20)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
-        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: reminderEnabled)
-        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: scheduledTimeEnabled)
+        .animation(.spring(response: 0.2, dampingFraction: 0.8), value: reminderEnabled)
+        .animation(.spring(response: 0.2, dampingFraction: 0.8), value: scheduledTimeEnabled)
     }
 
     // MARK: - Helpers
