@@ -102,6 +102,18 @@
 "Have habits in 3 different categories" = "Have habits in 3 different categories";
 "3 habits with a streak of 7+" = "3 habits with a streak of 7+";
 
+/* Pro / Subscription */
+"Unlock Pro" = "Unlock Pro";
+"Kindled Pro" = "Kindled Pro";
+"All features unlocked" = "All features unlocked";
+"Active" = "Active";
+"Manage subscription" = "Manage subscription";
+"Heatmap, charts, notes & more" = "Heatmap, charts, notes & more";
+"Upgrade to Pro" = "Upgrade to Pro";
+"Year Overview" = "Year Overview";
+"Notes Overview" = "Notes Overview";
+"Overall Charts" = "Overall Charts";
+
 /* Settings */
 "Your Name" = "Your Name";
 "Not set" = "Not set";

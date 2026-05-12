@@ -3,6 +3,8 @@ import SwiftData
 
 struct StatisticsView: View {
     @Query(sort: \Habit.sortOrder) var habits: [Habit]
+    @Environment(SubscriptionManager.self) private var subscriptionManager
+    @State private var showPaywall = false
 
     private var totalCompletionsThisMonth: Int {
         let calendar = Calendar.current
@@ -28,7 +30,9 @@ struct StatisticsView: View {
                 VStack(spacing: 20) {
                     summaryCards
                     if !habits.isEmpty {
-                        OverallChartsView(habits: habits)
+                        ProLockedView(title: "Overall Charts") {
+                            OverallChartsView(habits: habits)
+                        }
                         leaderboard
                     } else {
                         emptyState
@@ -57,14 +61,44 @@ struct StatisticsView: View {
                 icon: "calendar.badge.checkmark",
                 color: .blue
             )
-            StatCard(
-                value: "\(Int(overallRate * 100))%",
-                label: "Avg Rate",
-                icon: "chart.pie.fill",
-                color: .green
-            )
+            if subscriptionManager.isProUnlocked {
+                StatCard(
+                    value: "\(Int(overallRate * 100))%",
+                    label: "Avg Rate",
+                    icon: "chart.pie.fill",
+                    color: .green
+                )
+            } else {
+                lockedAvgRateCard
+            }
         }
         .padding(.top, 8)
+    }
+
+    private var lockedAvgRateCard: some View {
+        VStack(spacing: 10) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.green.opacity(0.15))
+                    .frame(width: 40, height: 40)
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Color.green)
+            }
+            Text("Pro")
+                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .foregroundStyle(.secondary)
+            Text("Avg Rate")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .onTapGesture { showPaywall = true }
+        .sheet(isPresented: $showPaywall) {
+            KindledPaywallView()
+        }
     }
 
     private var leaderboard: some View {

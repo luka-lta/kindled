@@ -66,7 +66,9 @@ struct HabitChartsView: View {
     var body: some View {
         VStack(spacing: 16) {
             last14DaysCard
-            weeklyTrendCard
+            ProLockedView(title: "12-Week Trend") {
+                weeklyTrendCard
+            }
         }
     }
 

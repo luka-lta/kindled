@@ -3,6 +3,8 @@ import SwiftUI
 struct HabitDetailView: View {
     let habit: Habit
     @State private var showEdit = false
+    @State private var showPaywall = false
+    @Environment(SubscriptionManager.self) private var subscriptionManager
 
     private var habitColor: Color {
         Color(hex: habit.colorHex) ?? .purple
@@ -153,12 +155,42 @@ struct HabitDetailView: View {
                 icon: "checkmark.circle.fill",
                 color: habitColor
             )
-            StatCard(
-                value: "\(Int(habit.completionRate * 100))%",
-                label: "Rate",
-                icon: "chart.bar.fill",
-                color: .green
-            )
+            if subscriptionManager.isProUnlocked {
+                StatCard(
+                    value: "\(Int(habit.completionRate * 100))%",
+                    label: "Rate",
+                    icon: "chart.bar.fill",
+                    color: .green
+                )
+            } else {
+                lockedRateCard
+            }
+        }
+    }
+
+    private var lockedRateCard: some View {
+        VStack(spacing: 10) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.green.opacity(0.15))
+                    .frame(width: 40, height: 40)
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Color.green)
+            }
+            Text("Pro")
+                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .foregroundStyle(.secondary)
+            Text("Rate")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .onTapGesture { showPaywall = true }
+        .sheet(isPresented: $showPaywall) {
+            KindledPaywallView()
         }
     }
 }

@@ -14,6 +14,12 @@ struct NotesOverviewView: View {
     }
 
     var body: some View {
+        ProLockedView(title: "Notes Overview") {
+            noteContent
+        }
+    }
+
+    private var noteContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
                 ZStack {
