@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage(StorageKeys.appAppearance) private var appearanceRaw: String = "System"
     @AppStorage(StorageKeys.appTheme) private var themeRaw: String = "Purple"
     @AppStorage(StorageKeys.appLanguage) private var appLanguage: String = "system"
@@ -71,6 +72,11 @@ struct ContentView: View {
         .onChange(of: appLanguage) { _, newValue in
             applyLanguage(newValue)
             rootID = UUID()
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                NotificationManager.shared.scheduleStreakProtectionReminder(habits: habits)
+            }
         }
         .task {
             applyLanguage(appLanguage)

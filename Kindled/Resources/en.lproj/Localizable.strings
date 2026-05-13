@@ -171,22 +171,20 @@
 "Light" = "Light";
 "Dark" = "Dark";
 
+/* Push Notifications */
+"Keep your streak alive! 🔥" = "Keep your streak alive! 🔥";
+"Don't break your streak!" = "Don't break your streak!";
+"streak_protection_body_active" = "You're on a %lld-day streak — don't stop now! 🔥";
+"streak_protection_body_start" = "Your habits are waiting. Start building your streak 💪";
+
 /* Onboarding */
 "Your name (optional)" = "Your name (optional)";
-"Habit Tracker" = "Habit Tracker";
 "Build better habits, daily" = "Build better habits, daily";
-"Build Better Habits" = "Build Better Habits";
-"Small daily actions compound into extraordinary results over time." = "Small daily actions compound into extraordinary results over time.";
-"Track any habit" = "Track any habit";
-"Daily reminders" = "Daily reminders";
-"Beautiful progress" = "Beautiful progress";
-"Build Your Streak" = "Build Your Streak";
-"Complete habits daily to grow your streak. Consistency is everything." = "Complete habits daily to grow your streak. Consistency is everything.";
-"See Your Progress" = "See Your Progress";
-"Year-at-a-glance heatmap, stats, and streak leaderboard keep you motivated." = "Year-at-a-glance heatmap, stats, and streak leaderboard keep you motivated.";
-"Yearly heatmap" = "Yearly heatmap";
-"Completion stats" = "Completion stats";
-"Confetti milestones 🎉" = "Confetti milestones 🎉";
+"Make it yours" = "Make it yours";
+"What should we call you?" = "What should we call you?";
+"Choose a color" = "Choose a color";
+"Your home view" = "Your home view";
+"Habit List" = "Habit List";
 
 /* Streak pill */
 "%lld day streak" = "%lld day streak";

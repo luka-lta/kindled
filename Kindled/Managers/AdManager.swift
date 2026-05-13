@@ -24,6 +24,26 @@ final class AdManager: NSObject {
         }
     }
 
+    func requestReviewAtMilestone(_ streak: Int) {
+        var usedMilestones = reviewMilestonesUsed()
+        guard !usedMilestones.contains(streak) else { return }
+        usedMilestones.insert(streak)
+        saveReviewMilestonesUsed(usedMilestones)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            self?.requestReview()
+        }
+    }
+
+    private func reviewMilestonesUsed() -> Set<Int> {
+        let stored = UserDefaults.standard.string(forKey: StorageKeys.reviewRequestedMilestones) ?? ""
+        return Set(stored.split(separator: ",").compactMap { Int($0) })
+    }
+
+    private func saveReviewMilestonesUsed(_ milestones: Set<Int>) {
+        let str = milestones.map(String.init).joined(separator: ",")
+        UserDefaults.standard.set(str, forKey: StorageKeys.reviewRequestedMilestones)
+    }
+
     private func requestReview() {
         guard let scene = UIApplication.shared.foregroundWindowScene else { return }
         AppStore.requestReview(in: scene)
