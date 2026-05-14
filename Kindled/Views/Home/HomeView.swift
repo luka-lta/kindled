@@ -420,6 +420,7 @@ struct HomeView: View {
             if hapticEnabled {
                 UIImpactFeedbackGenerator(style: existing.isCompleted ? .medium : .light).impactOccurred()
             }
+            NotificationManager.shared.scheduleStreakProtectionReminder(habits: habits)
             if !existing.isCompleted { return }
             pendingNoteEntry = existing
             return
@@ -433,9 +434,13 @@ struct HomeView: View {
 
         adManager.recordCompletion(isProUnlocked: subscriptionManager.isProUnlocked)
 
-        if streakMilestones.contains(habit.currentStreak) {
+        let streak = habit.currentStreak
+        if streakMilestones.contains(streak) {
             confettiFireID = UUID()
+            adManager.requestReviewAtMilestone(streak)
         }
+
+        NotificationManager.shared.scheduleStreakProtectionReminder(habits: habits)
 
         let newAchievements = achievementManager.check(habits: habits)
         if !newAchievements.isEmpty {

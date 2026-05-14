@@ -171,22 +171,20 @@
 "Light" = "Hell";
 "Dark" = "Dunkel";
 
+/* Push Notifications */
+"Keep your streak alive! 🔥" = "Halt deinen Streak am Leben! 🔥";
+"Don't break your streak!" = "Unterbrich deinen Streak nicht!";
+"streak_protection_body_active" = "Du hast einen %lld-Tage-Streak — hör nicht auf! 🔥";
+"streak_protection_body_start" = "Deine Gewohnheiten warten. Fang an, deinen Streak aufzubauen 💪";
+
 /* Onboarding */
 "Your name (optional)" = "Dein Name (optional)";
-"Habit Tracker" = "Gewohnheits-Tracker";
 "Build better habits, daily" = "Bessere Gewohnheiten, täglich";
-"Build Better Habits" = "Bessere Gewohnheiten aufbauen";
-"Small daily actions compound into extraordinary results over time." = "Kleine tägliche Aktionen summieren sich zu außergewöhnlichen Ergebnissen.";
-"Track any habit" = "Tracke jede Gewohnheit";
-"Daily reminders" = "Tägliche Erinnerungen";
-"Beautiful progress" = "Schöner Fortschritt";
-"Build Your Streak" = "Deinen Streak aufbauen";
-"Complete habits daily to grow your streak. Consistency is everything." = "Schließe Gewohnheiten täglich ab. Beständigkeit ist alles.";
-"See Your Progress" = "Deinen Fortschritt sehen";
-"Year-at-a-glance heatmap, stats, and streak leaderboard keep you motivated." = "Jahres-Heatmap, Statistiken und Bestenliste halten dich motiviert.";
-"Yearly heatmap" = "Jahres-Heatmap";
-"Completion stats" = "Abschluss-Statistiken";
-"Confetti milestones 🎉" = "Konfetti-Meilensteine 🎉";
+"Make it yours" = "Mach es zu deinem";
+"What should we call you?" = "Wie sollen wir dich nennen?";
+"Choose a color" = "Wähle eine Farbe";
+"Your home view" = "Deine Startansicht";
+"Habit List" = "Gewohnheitsliste";
 
 /* Streak pill */
 "%lld day streak" = "%lld-Tage-Streak";
