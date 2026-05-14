@@ -34,6 +34,7 @@ struct OnboardingView: View {
         }
         .ignoresSafeArea()
         .onAppear {
+            nameInput = savedUserName
             selectedTheme = AppTheme(rawValue: themeRaw) ?? .purple
         }
     }
@@ -243,20 +244,24 @@ struct PersonalizePageView: View {
 
             LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(AppTheme.allCases, id: \.rawValue) { theme in
-                    Circle()
-                        .fill(theme.color)
-                        .frame(height: 52)
-                        .overlay(
-                            Circle()
-                                .strokeBorder(.white, lineWidth: selectedTheme == theme ? 3 : 0)
-                                .padding(2)
-                        )
-                        .shadow(color: theme.color.opacity(0.5), radius: selectedTheme == theme ? 10 : 0)
-                        .scaleEffect(selectedTheme == theme ? 1.12 : 1.0)
-                        .animation(.spring(response: 0.25, dampingFraction: 0.65), value: selectedTheme)
-                        .onTapGesture {
-                            withAnimation { selectedTheme = theme }
-                        }
+                    Button {
+                        withAnimation { selectedTheme = theme }
+                    } label: {
+                        Circle()
+                            .fill(theme.color)
+                            .frame(height: 52)
+                            .overlay(
+                                Circle()
+                                    .strokeBorder(.white, lineWidth: selectedTheme == theme ? 3 : 0)
+                                    .padding(2)
+                            )
+                            .shadow(color: theme.color.opacity(0.5), radius: selectedTheme == theme ? 10 : 0)
+                            .scaleEffect(selectedTheme == theme ? 1.12 : 1.0)
+                            .animation(.spring(response: 0.25, dampingFraction: 0.65), value: selectedTheme)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text(LocalizedStringKey(theme.rawValue)))
+                    .accessibilityAddTraits(selectedTheme == theme ? .isSelected : [])
                 }
             }
         }
@@ -322,5 +327,6 @@ struct HomeViewCard: View {
             )
         }
         .buttonStyle(ScaleButtonStyle())
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
