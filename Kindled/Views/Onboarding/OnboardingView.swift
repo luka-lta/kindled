@@ -57,6 +57,10 @@ struct OnboardingView: View {
             if isLast {
                 savedUserName = nameInput.trimmingCharacters(in: .whitespaces)
                 themeRaw = selectedTheme.rawValue
+                AnalyticsManager.onboardingCompleted(
+                    theme: selectedTheme.rawValue,
+                    homeView: showTimeline ? "timeline" : "list"
+                )
                 hasSeenOnboarding = true
             } else {
                 withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {

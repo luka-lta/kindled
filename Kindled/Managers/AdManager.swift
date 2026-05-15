@@ -6,17 +6,30 @@ import UIKit
 final class AdManager: NSObject {
     private var interstitial: InterstitialAd?
     private var isLoading = false
+    private var lastAdShownDate: Date?
+    private var adsShownThisSession = 0
+
+    static let interstitialCooldown: TimeInterval = 3600
+    static let sessionAdCap = 3
+    static let newUserGraceDays = 3
 
     func start() {
         loadInterstitial()
     }
 
-    func recordCompletion(isProUnlocked: Bool = false) {
+    static func recordFirstLaunchIfNeeded() {
+        guard UserDefaults.standard.object(forKey: StorageKeys.firstLaunchDate) == nil else { return }
+        UserDefaults.standard.set(Date(), forKey: StorageKeys.firstLaunchDate)
+    }
+
+    func recordCompletion(isProUnlocked: Bool = false, isMilestone: Bool = false) {
         let count = UserDefaults.standard.integer(forKey: StorageKeys.adCompletionCount) + 1
         UserDefaults.standard.set(count, forKey: StorageKeys.adCompletionCount)
-        if !isProUnlocked, count % AdConstants.interstitialFrequency == 0 {
-            showInterstitial()
+
+        if !isProUnlocked, !isMilestone, count % AdConstants.interstitialFrequency == 0 {
+            showInterstitialIfAllowed()
         }
+
         if count >= AdConstants.reviewPromptThreshold,
            !UserDefaults.standard.bool(forKey: StorageKeys.reviewRequested) {
             requestReview()
@@ -32,6 +45,31 @@ final class AdManager: NSObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             self?.requestReview()
         }
+    }
+
+    func resetSessionAdCount() {
+        adsShownThisSession = 0
+    }
+
+    // MARK: - Private
+
+    private func showInterstitialIfAllowed() {
+        guard !isInGracePeriod else { return }
+        guard adsShownThisSession < Self.sessionAdCap else { return }
+        guard cooldownElapsed else { return }
+        showInterstitial()
+    }
+
+    private var isInGracePeriod: Bool {
+        guard let firstLaunch = UserDefaults.standard.object(forKey: StorageKeys.firstLaunchDate) as? Date else {
+            return true
+        }
+        return Date().timeIntervalSince(firstLaunch) < TimeInterval(Self.newUserGraceDays * 86400)
+    }
+
+    private var cooldownElapsed: Bool {
+        guard let last = lastAdShownDate else { return true }
+        return Date().timeIntervalSince(last) >= Self.interstitialCooldown
     }
 
     private func reviewMilestonesUsed() -> Set<Int> {
@@ -84,8 +122,13 @@ final class AdManager: NSObject {
 
 extension AdManager: FullScreenContentDelegate {
     func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
-        interstitial = nil
-        loadInterstitial()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.lastAdShownDate = Date()
+            self.adsShownThisSession += 1
+            self.interstitial = nil
+            self.loadInterstitial()
+        }
     }
 
     func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {

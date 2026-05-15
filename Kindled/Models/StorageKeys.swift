@@ -10,6 +10,7 @@ enum StorageKeys {
     static let adCompletionCount = "habitCompletionCount"
     static let reviewRequested = "reviewRequested"
     static let reviewRequestedMilestones = "reviewRequestedMilestones"
+    static let firstLaunchDate = "firstLaunchDate"
     static let defaultHomeView = "defaultHomeView"
     static let streakProtectionEnabled = "streakProtectionEnabled"
     static let streakProtectionHour = "streakProtectionHour"

@@ -420,6 +420,9 @@ struct HomeView: View {
             if hapticEnabled {
                 UIImpactFeedbackGenerator(style: existing.isCompleted ? .medium : .light).impactOccurred()
             }
+            if !existing.isCompleted {
+                AnalyticsManager.habitUncompleted(category: habit.category.rawValue)
+            }
             NotificationManager.shared.scheduleStreakProtectionReminder(habits: habits)
             if !existing.isCompleted { return }
             pendingNoteEntry = existing
@@ -432,10 +435,26 @@ struct HomeView: View {
         if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
         pendingNoteEntry = entry
 
-        adManager.recordCompletion(isProUnlocked: subscriptionManager.isProUnlocked)
-
         let streak = habit.currentStreak
-        if streakMilestones.contains(streak) {
+        let isMilestone = streakMilestones.contains(streak)
+
+        AnalyticsManager.habitCompleted(
+            name: habit.title,
+            category: habit.category.rawValue,
+            streak: streak,
+            hasScheduledTime: habit.scheduledTime != nil
+        )
+
+        if isMilestone {
+            AnalyticsManager.streakMilestone(streak: streak)
+        }
+
+        adManager.recordCompletion(
+            isProUnlocked: subscriptionManager.isProUnlocked,
+            isMilestone: isMilestone
+        )
+
+        if isMilestone {
             confettiFireID = UUID()
             adManager.requestReviewAtMilestone(streak)
         }
@@ -444,6 +463,7 @@ struct HomeView: View {
 
         let newAchievements = achievementManager.check(habits: habits)
         if !newAchievements.isEmpty {
+            newAchievements.forEach { AnalyticsManager.achievementUnlocked(id: $0.id, name: $0.title) }
             achievementQueue.append(contentsOf: newAchievements)
             showNextBanner()
         }
@@ -490,12 +510,14 @@ struct HomeView: View {
     private func deleteHabits(at offsets: IndexSet) {
         for index in offsets {
             let habit = filteredHabits[index]
+            AnalyticsManager.habitDeleted(category: habit.category.rawValue)
             NotificationManager.shared.removeAllReminders(for: habit)
             modelContext.delete(habit)
         }
     }
 
     private func deleteHabit(_ habit: Habit) {
+        AnalyticsManager.habitDeleted(category: habit.category.rawValue)
         NotificationManager.shared.removeAllReminders(for: habit)
         modelContext.delete(habit)
     }

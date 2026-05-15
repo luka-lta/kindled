@@ -14,6 +14,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
+        AdManager.recordFirstLaunchIfNeeded()
         return true
     }
 }
@@ -24,6 +25,7 @@ struct KindledApp: App {
     @State private var adManager = AdManager()
     @State private var consentManager = ConsentManager()
     @State private var subscriptionManager = SubscriptionManager()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -39,5 +41,10 @@ struct KindledApp: App {
                 }
         }
         .modelContainer(for: [Habit.self, HabitEntry.self, HabitReminder.self])
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                adManager.resetSessionAdCount()
+            }
+        }
     }
 }
