@@ -24,6 +24,7 @@ struct KindledApp: App {
     @State private var adManager = AdManager()
     @State private var consentManager = ConsentManager()
     @State private var subscriptionManager = SubscriptionManager()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -39,5 +40,10 @@ struct KindledApp: App {
                 }
         }
         .modelContainer(for: [Habit.self, HabitEntry.self, HabitReminder.self])
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                adManager.resetSessionAdCount()
+            }
+        }
     }
 }

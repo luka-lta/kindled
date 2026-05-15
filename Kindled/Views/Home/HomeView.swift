@@ -432,10 +432,15 @@ struct HomeView: View {
         if hapticEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
         pendingNoteEntry = entry
 
-        adManager.recordCompletion(isProUnlocked: subscriptionManager.isProUnlocked)
-
         let streak = habit.currentStreak
-        if streakMilestones.contains(streak) {
+        let isMilestone = streakMilestones.contains(streak)
+
+        adManager.recordCompletion(
+            isProUnlocked: subscriptionManager.isProUnlocked,
+            isMilestone: isMilestone
+        )
+
+        if isMilestone {
             confettiFireID = UUID()
             adManager.requestReviewAtMilestone(streak)
         }
