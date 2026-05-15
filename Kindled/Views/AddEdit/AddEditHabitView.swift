@@ -361,6 +361,7 @@ struct AddEditHabitView: View {
             existing.category = selectedCategory
             existing.scheduledTime = scheduledTimeEnabled ? scheduledTimeValue : nil
             habit = existing
+            AnalyticsManager.habitEdited(category: selectedCategory.rawValue, frequency: frequency.rawValue)
         } else {
             habit = Habit(
                 title: title.trimmingCharacters(in: .whitespaces),
@@ -372,6 +373,12 @@ struct AddEditHabitView: View {
                 scheduledTime: scheduledTimeEnabled ? scheduledTimeValue : nil
             )
             modelContext.insert(habit)
+            AnalyticsManager.habitCreated(
+                category: selectedCategory.rawValue,
+                frequency: frequency.rawValue,
+                hasReminder: reminderEnabled,
+                hasScheduledTime: scheduledTimeEnabled
+            )
         }
 
         let oldReminderIDs = habit.reminders.map { $0.notificationID }
