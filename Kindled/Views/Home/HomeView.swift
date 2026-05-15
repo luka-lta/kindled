@@ -446,7 +446,7 @@ struct HomeView: View {
         )
 
         if isMilestone {
-            AnalyticsManager.streakMilestone(streak: streak, habitName: habit.title)
+            AnalyticsManager.streakMilestone(streak: streak)
         }
 
         adManager.recordCompletion(

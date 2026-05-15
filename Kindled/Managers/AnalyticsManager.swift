@@ -17,10 +17,9 @@ enum AnalyticsManager {
         ])
     }
 
-    static func streakMilestone(streak: Int, habitName: String) {
+    static func streakMilestone(streak: Int) {
         Analytics.logEvent("streak_milestone", parameters: [
-            "streak_days": streak,
-            "habit_name": habitName
+            "streak_days": streak
         ])
     }
 

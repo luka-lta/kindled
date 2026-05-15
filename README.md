@@ -11,17 +11,13 @@
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-%E2%9C%93-blue)](https://developer.apple.com/xcode/swiftui/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-<img src="docs/images/hero-banner.png" alt="Kindled Hero Banner" width="100%" />
-
 </div>
 
----
 
 ## Overview
 
 Kindled is a minimal, beautiful iOS habit tracker built with SwiftUI and SwiftData. Track daily habits, visualize streaks, and stay motivated with achievements — all in a clean, themeable interface.
 
----
 
 ## Screenshots
 
@@ -29,15 +25,14 @@ Kindled is a minimal, beautiful iOS habit tracker built with SwiftUI and SwiftDa
 
 | Home | Habit Detail | Statistics | Achievements |
 |:----:|:------------:|:----------:|:------------:|
-| <img src="docs/images/screenshot-home.png" width="180" /> | <img src="docs/images/screenshot-detail.png" width="180" /> | <img src="docs/images/screenshot-statistics.png" width="180" /> | <img src="docs/images/screenshot-achievements.png" width="180" /> |
+| <img src="docs/images/screenshot-home.png" alt="Home screen" width="180" /> | <img src="docs/images/screenshot-detail.png" alt="Habit detail screen" width="180" /> | <img src="docs/images/screenshot-statistics.png" alt="Statistics screen" width="180" /> | <img src="docs/images/screenshot-achievements.png" alt="Achievements screen" width="180" /> |
 
 | Add Habit | Heatmap | Settings | Onboarding |
 |:---------:|:-------:|:--------:|:----------:|
-| <img src="docs/images/screenshot-add.png" width="180" /> | <img src="docs/images/screenshot-heatmap.png" width="180" /> | <img src="docs/images/screenshot-settings.png" width="180" /> | <img src="docs/images/screenshot-onboarding.png" width="180" /> |
+| <img src="docs/images/screenshot-add.png" alt="Add habit screen" width="180" /> | <img src="docs/images/screenshot-heatmap.png" alt="Heatmap screen" width="180" /> | <img src="docs/images/screenshot-settings.png" alt="Settings screen" width="180" /> | <img src="docs/images/screenshot-onboarding.png" alt="Onboarding screen" width="180" /> |
 
 </div>
 
----
 
 ## Features
 
@@ -66,7 +61,6 @@ Kindled is a minimal, beautiful iOS habit tracker built with SwiftUI and SwiftDa
 - **Local notifications** — daily or weekly reminders per habit
 - **Custom times** — set reminder time per habit
 
----
 
 ## Tech Stack
 
@@ -81,13 +75,12 @@ Kindled is a minimal, beautiful iOS habit tracker built with SwiftUI and SwiftDa
 | Subscriptions | RevenueCat *(in progress)* |
 | Min Target | iOS 17 |
 
----
 
 ## Architecture
 
 MVVM-ish pattern with `@Observable` managers injected via SwiftUI environment.
 
-```
+```text
 KindledApp
 ├── ConsentManager      — GDPR/ATT consent flow
 ├── AdManager           — AdMob interstitials + review prompts
@@ -101,16 +94,15 @@ KindledApp
 
 **Data model:**
 
-```
+```text
 Habit ──cascade──> HabitEntry
 Habit ──cascade──> HabitReminder
 ```
 
----
 
 ## Project Structure
 
-```
+```text
 Kindled/
 ├── KindledApp.swift
 ├── ContentView.swift
@@ -139,7 +131,6 @@ Kindled/
 └── Extensions/
 ```
 
----
 
 ## Requirements
 
@@ -148,7 +139,6 @@ Kindled/
 - Swift 5.9+
 - A `GoogleService-Info.plist` (Firebase) — not included in repo
 
----
 
 ## Getting Started
 
@@ -166,13 +156,11 @@ Kindled/
 
 > AdMob uses Google's test ad unit IDs automatically in `DEBUG` builds — no real ads shown during development.
 
----
 
 ## License
 
 MIT — see [LICENSE](LICENSE) for details.
 
----
 
 <div align="center">
 
