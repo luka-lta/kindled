@@ -12,7 +12,7 @@
 		A01286342FAE159B00629E5A /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = A01286332FAE159B00629E5A /* RevenueCat */; };
 		A01286362FAE159B00629E5A /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = A01286352FAE159B00629E5A /* RevenueCatUI */; };
 		A01286A02FAFCC7600629E5A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A012869F2FAFCC7600629E5A /* FirebaseAnalytics */; };
-		A01286A42FAFCF9000629E5A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A01286A32FAFCF9000629E5A /* GoogleService-Info.plist */; };
+		A01286A42FAFCF9000629E5A /* Kindled/GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A01286A32FAFCF9000629E5A /* Kindled/GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,7 +29,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A01286A32FAFCF9000629E5A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Kindled/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A01286A32FAFCF9000629E5A /* Kindled/GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Kindled/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A07078942FA60446009298AF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		A07078962FA60446009298AF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kindled.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,7 +87,7 @@
 				A0A7F8D02FA54E3F00BCE594 /* Kindled */,
 				A07078932FA60446009298AF /* Frameworks */,
 				A0A7F8CF2FA54E3F00BCE594 /* Products */,
-				A01286A32FAFCF9000629E5A /* GoogleService-Info.plist */,
+				A01286A32FAFCF9000629E5A /* Kindled/GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -176,7 +176,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A01286A42FAFCF9000629E5A /* GoogleService-Info.plist in Resources */,
+				A01286A42FAFCF9000629E5A /* Kindled/GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
