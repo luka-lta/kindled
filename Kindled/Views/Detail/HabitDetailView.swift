@@ -4,7 +4,10 @@ struct HabitDetailView: View {
     let habit: Habit
     @State private var showEdit = false
     @State private var showPaywall = false
+    @State private var showShareSheet = false
+    @State private var shareItems: [Any] = []
     @Environment(SubscriptionManager.self) private var subscriptionManager
+    @Environment(\.themeColor) private var themeColor
 
     private var habitColor: Color {
         Color(hex: habit.colorHex) ?? .purple
@@ -38,6 +41,19 @@ struct HabitDetailView: View {
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                if habit.currentStreak > 0 {
+                    Button {
+                        prepareShare()
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .shadow(color: .black.opacity(0.2), radius: 4)
+                    }
+                    .accessibilityLabel(Text(LocalizedStringKey("Share Streak")))
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     showEdit = true
                 } label: {
@@ -51,6 +67,22 @@ struct HabitDetailView: View {
         .sheet(isPresented: $showEdit) {
             AddEditHabitView(editHabit: habit)
         }
+        .sheet(isPresented: $showShareSheet) {
+            ShareSheet(activityItems: shareItems)
+        }
+    }
+
+    // MARK: - Share
+
+    @MainActor
+    private func prepareShare() {
+        let cardView = StreakShareCardView(habit: habit, themeColor: themeColor)
+        let renderer = ImageRenderer(content: cardView)
+        renderer.proposedSize = .init(width: 1080, height: 1920)
+        renderer.scale = UIScreen.main.scale
+        guard let uiImage = renderer.uiImage else { return }
+        shareItems = [uiImage]
+        showShareSheet = true
     }
 
     // MARK: - Header

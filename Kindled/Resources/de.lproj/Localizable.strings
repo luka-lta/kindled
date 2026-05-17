@@ -185,6 +185,17 @@
 "Choose a color" = "Wähle eine Farbe";
 "Your home view" = "Deine Startansicht";
 "Habit List" = "Gewohnheitsliste";
+"Quick start" = "Schnellstart";
+"Pick habits to begin with" = "Wähle Gewohnheiten zum Starten";
+"Morning Run" = "Morgenrunde";
+"Read Daily" = "Täglich lesen";
+"Drink Water" = "Wasser trinken";
+"Meditate" = "Meditieren";
+
+/* Streak sharing */
+"Share Streak" = "Streak teilen";
+"Share your milestone" = "Teile deinen Meilenstein";
+"Share" = "Teilen";
 
 /* Streak pill */
 "%lld day streak" = "%lld-Tage-Streak";
