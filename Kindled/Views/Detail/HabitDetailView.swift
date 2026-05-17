@@ -79,7 +79,7 @@ struct HabitDetailView: View {
         let cardView = StreakShareCardView(habit: habit, themeColor: themeColor)
         let renderer = ImageRenderer(content: cardView)
         renderer.proposedSize = .init(width: 1080, height: 1920)
-        renderer.scale = UIScreen.main.scale
+        renderer.scale = 1
         guard let uiImage = renderer.uiImage else { return }
         shareItems = [uiImage]
         showShareSheet = true

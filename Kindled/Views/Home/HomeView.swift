@@ -554,7 +554,7 @@ struct HomeView: View {
         let card = StreakShareCardView(habit: habit, themeColor: themeColor)
         let renderer = ImageRenderer(content: card)
         renderer.proposedSize = .init(width: 1080, height: 1920)
-        renderer.scale = UIScreen.main.scale
+        renderer.scale = 1
         guard let uiImage = renderer.uiImage else { return }
         milestoneShareItems = [uiImage]
         showMilestoneShareSheet = true
@@ -617,8 +617,12 @@ private struct MilestoneShareBanner: View {
         .padding(.horizontal, 16)
         .padding(.bottom, 8)
         .task {
-            try? await Task.sleep(for: .seconds(5))
-            onDismiss()
+            do {
+                try await Task.sleep(for: .seconds(5))
+                onDismiss()
+            } catch {
+                // Task cancelled (view removed) — skip onDismiss
+            }
         }
     }
 }
