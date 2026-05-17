@@ -185,6 +185,17 @@
 "Choose a color" = "Choose a color";
 "Your home view" = "Your home view";
 "Habit List" = "Habit List";
+"Quick start" = "Quick start";
+"Pick habits to begin with" = "Pick habits to begin with";
+"Morning Run" = "Morning Run";
+"Read Daily" = "Read Daily";
+"Drink Water" = "Drink Water";
+"Meditate" = "Meditate";
+
+/* Streak sharing */
+"Share Streak" = "Share Streak";
+"Share your milestone" = "Share your milestone";
+"Share" = "Share";
 
 /* Streak pill */
 "%lld day streak" = "%lld day streak";

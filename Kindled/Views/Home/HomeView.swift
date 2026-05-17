@@ -25,6 +25,9 @@ struct HomeView: View {
     @AppStorage(StorageKeys.userName) private var userName: String = ""
     @State private var emptyPulse = false
     @State private var tlNow = Date()
+    @State private var milestoneShareHabit: Habit? = nil
+    @State private var milestoneShareItems: [Any] = []
+    @State private var showMilestoneShareSheet = false
     private let tlClock = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
 
     private static let tlTimeFmt: DateFormatter = {
@@ -160,6 +163,27 @@ struct HomeView: View {
                         .padding(.top, 8)
                         .zIndex(10)
                 }
+            }
+            .overlay(alignment: .bottom) {
+                if let shareHabit = milestoneShareHabit {
+                    MilestoneShareBanner(
+                        habit: shareHabit,
+                        themeColor: themeColor,
+                        onShare: {
+                            withAnimation(.easeOut(duration: 0.25)) { milestoneShareHabit = nil }
+                            prepareMilestoneShare(habit: shareHabit)
+                        },
+                        onDismiss: {
+                            withAnimation(.easeOut(duration: 0.25)) { milestoneShareHabit = nil }
+                        }
+                    )
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .padding(.bottom, consentManager.canShowAds ? BannerAdView.height : 0)
+                    .zIndex(8)
+                }
+            }
+            .sheet(isPresented: $showMilestoneShareSheet) {
+                ShareSheet(activityItems: milestoneShareItems)
             }
             .onReceive(tlClock) { tlNow = $0 }
             .onDisappear {
@@ -457,6 +481,9 @@ struct HomeView: View {
         if isMilestone {
             confettiFireID = UUID()
             adManager.requestReviewAtMilestone(streak)
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+                milestoneShareHabit = habit
+            }
         }
 
         NotificationManager.shared.scheduleStreakProtectionReminder(habits: habits)
@@ -520,6 +547,83 @@ struct HomeView: View {
         AnalyticsManager.habitDeleted(category: habit.category.rawValue)
         NotificationManager.shared.removeAllReminders(for: habit)
         modelContext.delete(habit)
+    }
+
+    @MainActor
+    private func prepareMilestoneShare(habit: Habit) {
+        let card = StreakShareCardView(habit: habit, themeColor: themeColor)
+        let renderer = ImageRenderer(content: card)
+        renderer.proposedSize = .init(width: 1080, height: 1920)
+        renderer.scale = 1
+        guard let uiImage = renderer.uiImage else { return }
+        milestoneShareItems = [uiImage]
+        showMilestoneShareSheet = true
+    }
+}
+
+private struct MilestoneShareBanner: View {
+    let habit: Habit
+    let themeColor: Color
+    let onShare: () -> Void
+    let onDismiss: () -> Void
+
+    private var habitColor: Color {
+        Color(hex: habit.colorHex) ?? themeColor
+    }
+
+    private var streakLabel: String {
+        String(format: NSLocalizedString("%lld day streak", comment: ""), habit.currentStreak)
+    }
+
+    var body: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(habitColor.opacity(0.15))
+                    .frame(width: 44, height: 44)
+                Image(systemName: habit.icon)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(habitColor)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(verbatim: "\(streakLabel) 🔥")
+                    .font(.subheadline.bold())
+                Text(LocalizedStringKey("Share your milestone"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Button(action: onShare) {
+                Text(LocalizedStringKey("Share"))
+                    .font(.subheadline.bold())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(habitColor, in: Capsule())
+            }
+
+            Button(action: onDismiss) {
+                Image(systemName: "xmark")
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+                    .padding(8)
+            }
+        }
+        .padding(14)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 18))
+        .padding(.horizontal, 16)
+        .padding(.bottom, 8)
+        .task {
+            do {
+                try await Task.sleep(for: .seconds(5))
+                onDismiss()
+            } catch {
+                // Task cancelled (view removed) — skip onDismiss
+            }
+        }
     }
 }
 

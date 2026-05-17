@@ -1,14 +1,19 @@
 import SwiftUI
+import SwiftData
 
 struct OnboardingView: View {
     @AppStorage(StorageKeys.hasSeenOnboarding) private var hasSeenOnboarding = false
     @AppStorage(StorageKeys.userName) private var savedUserName: String = ""
     @AppStorage(StorageKeys.appTheme) private var themeRaw: String = "Purple"
     @AppStorage(StorageKeys.defaultHomeView) private var showTimeline: Bool = false
+    @Environment(\.modelContext) private var modelContext
 
     @State private var currentPage = 0
     @State private var nameInput: String = ""
     @State private var selectedTheme: AppTheme = .purple
+    @State private var selectedStarterIDs: Set<Int> = []
+
+    private static let totalPages = 3
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -21,13 +26,21 @@ struct OnboardingView: View {
                     showTimeline: $showTimeline
                 )
                 .tag(1)
+                StarterHabitPickerView(
+                    selectedTheme: selectedTheme,
+                    selectedIDs: $selectedStarterIDs
+                )
+                .tag(2)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
 
-            VStack(spacing: 20) {
+            VStack(spacing: 12) {
                 pageDots
-                actionButton
+                primaryButton
+                if currentPage == 2 {
+                    skipButton
+                }
             }
             .padding(.horizontal, 28)
             .padding(.bottom, 52)
@@ -41,7 +54,7 @@ struct OnboardingView: View {
 
     private var pageDots: some View {
         HStack(spacing: 8) {
-            ForEach(0..<2, id: \.self) { index in
+            ForEach(0..<Self.totalPages, id: \.self) { index in
                 Capsule()
                     .fill(currentPage == index ? Color.white : Color.white.opacity(0.35))
                     .frame(width: currentPage == index ? 28 : 8, height: 8)
@@ -50,21 +63,15 @@ struct OnboardingView: View {
         }
     }
 
-    private var actionButton: some View {
-        let isLast = currentPage == 1
+    private var primaryButton: some View {
+        let isLast = currentPage == 2
 
         return Button {
             if isLast {
-                savedUserName = nameInput.trimmingCharacters(in: .whitespaces)
-                themeRaw = selectedTheme.rawValue
-                AnalyticsManager.onboardingCompleted(
-                    theme: selectedTheme.rawValue,
-                    homeView: showTimeline ? "timeline" : "list"
-                )
-                hasSeenOnboarding = true
+                completeOnboarding(insertHabits: true)
             } else {
                 withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                    currentPage = 1
+                    currentPage += 1
                 }
             }
         } label: {
@@ -80,6 +87,44 @@ struct OnboardingView: View {
             .background(.white, in: RoundedRectangle(cornerRadius: 18))
         }
         .buttonStyle(ScaleButtonStyle())
+    }
+
+    private var skipButton: some View {
+        Button {
+            completeOnboarding(insertHabits: false)
+        } label: {
+            Text(LocalizedStringKey("Skip"))
+                .font(.subheadline)
+                .foregroundStyle(.white.opacity(0.65))
+        }
+    }
+
+    private func completeOnboarding(insertHabits: Bool) {
+        savedUserName = nameInput.trimmingCharacters(in: .whitespaces)
+        themeRaw = selectedTheme.rawValue
+        if insertHabits {
+            insertSelectedStarterHabits()
+        }
+        AnalyticsManager.onboardingCompleted(
+            theme: selectedTheme.rawValue,
+            homeView: showTimeline ? "timeline" : "list"
+        )
+        hasSeenOnboarding = true
+    }
+
+    private func insertSelectedStarterHabits() {
+        let selected = starterHabitTemplates.filter { selectedStarterIDs.contains($0.id) }
+        for (index, template) in selected.enumerated() {
+            let habit = Habit(
+                title: NSLocalizedString(template.titleKey, comment: ""),
+                icon: template.icon,
+                colorHex: template.colorHex,
+                frequency: .daily,
+                category: template.category,
+                sortOrder: index
+            )
+            modelContext.insert(habit)
+        }
     }
 }
 
