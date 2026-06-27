@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct HabitDetailView: View {
     let habit: Habit

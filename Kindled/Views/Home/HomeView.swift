@@ -514,14 +514,14 @@ struct HomeView: View {
 
     private var greetingText: Text {
         let hour = Calendar.current.component(.hour, from: Date())
-        let base: LocalizedStringKey
+        let greeting: String
         switch hour {
-        case 0..<12: base = "Good Morning"
-        case 12..<17: base = "Good Afternoon"
-        default:      base = "Good Evening"
+        case 0..<12: greeting = NSLocalizedString("Good Morning", comment: "")
+        case 12..<17: greeting = NSLocalizedString("Good Afternoon", comment: "")
+        default:      greeting = NSLocalizedString("Good Evening", comment: "")
         }
         let name = userName.trimmingCharacters(in: .whitespaces)
-        return name.isEmpty ? Text(base) : Text(base) + Text(", \(name)")
+        return Text(verbatim: name.isEmpty ? greeting : "\(greeting), \(name)")
     }
 
     // MARK: - Actions
