@@ -1,5 +1,6 @@
 import SwiftData
 import Foundation
+import SwiftUI
 
 enum HabitFrequency: String, Codable, CaseIterable {
     case daily = "Daily"
@@ -22,6 +23,9 @@ final class Habit {
         set { categoryRaw = newValue.rawValue }
     }
     var sortOrder: Int
+    var isPaused: Bool = false
+    var pausedSince: Date?
+    var stackName: String?
 
     @Relationship(deleteRule: .cascade) var entries: [HabitEntry]
     @Relationship(deleteRule: .cascade) var reminders: [HabitReminder]
@@ -58,7 +62,8 @@ final class Habit {
 
         guard !completedDates.isEmpty else { return 0 }
 
-        var checkDate = calendar.startOfDay(for: Date())
+        // Freeze streak at pause date so gap doesn't reset it
+        var checkDate = calendar.startOfDay(for: isPaused ? (pausedSince ?? Date()) : Date())
         if !completedDates.contains(checkDate) {
             guard let prev = calendar.date(byAdding: .day, value: step, to: checkDate),
                   completedDates.contains(prev) else { return 0 }
@@ -143,5 +148,9 @@ final class Habit {
 
     var completedDateStrings: Set<String> {
         Set(entries.filter { $0.isCompleted }.map { Habit.ymdFormatter.string(from: $0.completedDate) })
+    }
+
+    var displayColor: Color {
+        Color(hex: colorHex) ?? .purple
     }
 }

@@ -83,14 +83,45 @@ struct HomeView: View {
 
     // MARK: - List helpers
 
-    private var filteredHabits: [Habit] {
-        guard let category = selectedCategory else { return habits }
-        return habits.filter { $0.category == category }
+    private var activeHabits: [Habit] {
+        let base = selectedCategory == nil ? habits : habits.filter { $0.category == selectedCategory }
+        return base.filter { !$0.isPaused }
     }
 
+    private var pausedHabits: [Habit] {
+        habits.filter { $0.isPaused }
+    }
+
+    // Keep for onMove/onDelete compatibility
+    private var filteredHabits: [Habit] { activeHabits }
+
     private var todayProgress: Double {
-        guard !habits.isEmpty else { return 0 }
-        return Double(habits.filter { $0.isCompletedToday }.count) / Double(habits.count)
+        guard !activeHabits.isEmpty else { return 0 }
+        return Double(activeHabits.filter { $0.isCompletedToday }.count) / Double(activeHabits.count)
+    }
+
+    private var habitGroups: [(name: String?, habits: [Habit])] {
+        var orderedNames: [String] = []
+        var grouped: [String: [Habit]] = [:]
+        var standalone: [Habit] = []
+
+        for habit in activeHabits {
+            if let name = habit.stackName, !name.isEmpty {
+                if grouped[name] == nil {
+                    orderedNames.append(name)
+                    grouped[name] = []
+                }
+                grouped[name]!.append(habit)
+            } else {
+                standalone.append(habit)
+            }
+        }
+
+        var result = orderedNames.map { (name: Optional($0), habits: grouped[$0] ?? []) }
+        if !standalone.isEmpty {
+            result.append((name: nil, habits: standalone))
+        }
+        return result
     }
 
     // MARK: - Body
@@ -168,7 +199,6 @@ struct HomeView: View {
                 if let shareHabit = milestoneShareHabit {
                     MilestoneShareBanner(
                         habit: shareHabit,
-                        themeColor: themeColor,
                         onShare: {
                             withAnimation(.easeOut(duration: 0.25)) { milestoneShareHabit = nil }
                             prepareMilestoneShare(habit: shareHabit)
@@ -311,26 +341,89 @@ struct HomeView: View {
             emptyState
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
-        } else if filteredHabits.isEmpty {
+        } else if activeHabits.isEmpty && pausedHabits.isEmpty {
             filteredEmptyState
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
         } else {
-            ForEach(filteredHabits) { habit in
-                NavigationLink(destination: HabitDetailView(habit: habit)) {
-                    HabitCard(habit: habit) { toggleHabit(habit) }
-                }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
-                .contextMenu {
-                    Button { editHabit = habit } label: { Label("Edit", systemImage: "pencil") }
-                    Button(role: .destructive) { deleteHabit(habit) } label: { Label("Delete", systemImage: "trash") }
+            let groups = habitGroups
+            ForEach(Array(groups.enumerated()), id: \.offset) { _, group in
+                if let name = group.name {
+                    Section {
+                        ForEach(group.habits) { habit in
+                            habitRow(habit)
+                        }
+                    } header: {
+                        stackSectionHeader(name: name, habits: group.habits)
+                    }
+                } else {
+                    ForEach(group.habits) { habit in
+                        habitRow(habit)
+                    }
+                    .onMove(perform: moveHabitsIfUnfiltered)
+                    .onDelete(perform: deleteHabits)
                 }
             }
-            .onMove(perform: moveHabitsIfUnfiltered)
-            .onDelete(perform: deleteHabits)
+
+            if !pausedHabits.isEmpty {
+                Section {
+                    ForEach(pausedHabits) { habit in
+                        NavigationLink(destination: HabitDetailView(habit: habit)) {
+                            HabitCard(habit: habit) { }
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
+                        .contextMenu {
+                            Button { editHabit = habit } label: { Label("Edit", systemImage: "pencil") }
+                            Button(role: .destructive) { deleteHabit(habit) } label: { Label("Delete", systemImage: "trash") }
+                        }
+                    }
+                } header: {
+                    Text(LocalizedStringKey("Paused"))
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .listRowInsets(EdgeInsets(top: 16, leading: 20, bottom: 4, trailing: 20))
+                }
+            }
         }
+    }
+
+    private func habitRow(_ habit: Habit) -> some View {
+        NavigationLink(destination: HabitDetailView(habit: habit)) {
+            HabitCard(habit: habit) { toggleHabit(habit) }
+        }
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
+        .contextMenu {
+            Button { editHabit = habit } label: { Label("Edit", systemImage: "pencil") }
+            Button(role: .destructive) { deleteHabit(habit) } label: { Label("Delete", systemImage: "trash") }
+        }
+    }
+
+    private func stackSectionHeader(name: String, habits: [Habit]) -> some View {
+        HStack {
+            Image(systemName: "rectangle.stack.fill")
+                .font(.caption.bold())
+                .foregroundStyle(.secondary)
+            Text(name)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+            Spacer()
+            let incomplete = habits.filter { !$0.isCompletedToday }
+            if !incomplete.isEmpty {
+                Button {
+                    incomplete.forEach { toggleHabit($0) }
+                } label: {
+                    Text(LocalizedStringKey("Complete All"))
+                        .font(.caption.bold())
+                        .foregroundStyle(themeColor)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .listRowInsets(EdgeInsets(top: 16, leading: 20, bottom: 4, trailing: 20))
     }
 
     // MARK: - Header card
@@ -343,8 +436,8 @@ struct HomeView: View {
                 Text(Date().formatted(.dateTime.weekday(.wide).month(.wide).day()))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                if !habits.isEmpty {
-                    Text("\(habits.filter { $0.isCompletedToday }.count) of \(habits.count) done")
+                if !activeHabits.isEmpty {
+                    Text("\(activeHabits.filter { $0.isCompletedToday }.count) of \(activeHabits.count) done")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .padding(.top, 2)
@@ -487,6 +580,7 @@ struct HomeView: View {
         }
 
         NotificationManager.shared.scheduleStreakProtectionReminder(habits: habits)
+        WidgetDataBridge.write(habits: habits)
 
         let newAchievements = achievementManager.check(habits: habits)
         if !newAchievements.isEmpty {
@@ -558,95 +652,5 @@ struct HomeView: View {
         guard let uiImage = renderer.uiImage else { return }
         milestoneShareItems = [uiImage]
         showMilestoneShareSheet = true
-    }
-}
-
-private struct MilestoneShareBanner: View {
-    let habit: Habit
-    let themeColor: Color
-    let onShare: () -> Void
-    let onDismiss: () -> Void
-
-    private var habitColor: Color {
-        Color(hex: habit.colorHex) ?? themeColor
-    }
-
-    private var streakLabel: String {
-        String(format: NSLocalizedString("%lld day streak", comment: ""), habit.currentStreak)
-    }
-
-    var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(habitColor.opacity(0.15))
-                    .frame(width: 44, height: 44)
-                Image(systemName: habit.icon)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(habitColor)
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(verbatim: "\(streakLabel) 🔥")
-                    .font(.subheadline.bold())
-                Text(LocalizedStringKey("Share your milestone"))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
-            Button(action: onShare) {
-                Text(LocalizedStringKey("Share"))
-                    .font(.subheadline.bold())
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
-                    .background(habitColor, in: Capsule())
-            }
-
-            Button(action: onDismiss) {
-                Image(systemName: "xmark")
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-                    .padding(8)
-            }
-        }
-        .padding(14)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 18))
-        .padding(.horizontal, 16)
-        .padding(.bottom, 8)
-        .task {
-            do {
-                try await Task.sleep(for: .seconds(5))
-                onDismiss()
-            } catch {
-                // Task cancelled (view removed) — skip onDismiss
-            }
-        }
-    }
-}
-
-private struct CategoryChip: View {
-    let label: LocalizedStringKey
-    let icon: String
-    let color: Color
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 5) {
-                Image(systemName: icon)
-                    .font(.caption)
-                Text(label)
-                    .font(.caption.weight(.medium))
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 7)
-            .background(isSelected ? color : Color(.secondarySystemGroupedBackground), in: Capsule())
-            .foregroundStyle(isSelected ? .white : .primary)
-        }
-        .buttonStyle(.plain)
     }
 }

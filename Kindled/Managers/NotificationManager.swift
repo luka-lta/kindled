@@ -27,7 +27,7 @@ final class NotificationManager {
         components.hour = reminder.hour
         components.minute = reminder.minute
         if habit.frequency == .weekly {
-            components.weekday = Calendar.current.component(.weekday, from: Date())
+            components.weekday = reminder.weekday
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
