@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct HabitDetailView: View {
     let habit: Habit
@@ -8,10 +9,7 @@ struct HabitDetailView: View {
     @State private var shareItems: [Any] = []
     @Environment(SubscriptionManager.self) private var subscriptionManager
     @Environment(\.themeColor) private var themeColor
-
-    private var habitColor: Color {
-        Color(hex: habit.colorHex) ?? .purple
-    }
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         ScrollView {
@@ -41,7 +39,7 @@ struct HabitDetailView: View {
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                if habit.currentStreak > 0 {
+                if habit.currentStreak > 0 && !habit.isPaused {
                     Button {
                         prepareShare()
                     } label: {
@@ -52,6 +50,17 @@ struct HabitDetailView: View {
                     }
                     .accessibilityLabel(Text(LocalizedStringKey("Share Streak")))
                 }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    togglePause()
+                } label: {
+                    Image(systemName: habit.isPaused ? "play.circle.fill" : "pause.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 4)
+                }
+                .accessibilityLabel(Text(habit.isPaused ? LocalizedStringKey("Resume Habit") : LocalizedStringKey("Pause Habit")))
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -88,9 +97,10 @@ struct HabitDetailView: View {
     // MARK: - Header
 
     private func parallaxHeaderBanner(scrollOffset: CGFloat) -> some View {
-        ZStack(alignment: .bottom) {
+        let color = habit.displayColor
+        return ZStack(alignment: .bottom) {
             LinearGradient(
-                colors: [habitColor, habitColor.opacity(0.55)],
+                colors: [color, color.opacity(0.55)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -185,7 +195,7 @@ struct HabitDetailView: View {
                 value: "\(habit.totalCompletions)",
                 label: "Total",
                 icon: "checkmark.circle.fill",
-                color: habitColor
+                color: habit.displayColor
             )
             if subscriptionManager.isProUnlocked {
                 StatCard(
@@ -223,6 +233,19 @@ struct HabitDetailView: View {
         .onTapGesture { showPaywall = true }
         .sheet(isPresented: $showPaywall) {
             KindledPaywallView()
+        }
+    }
+
+    // MARK: - Pause
+
+    private func togglePause() {
+        if habit.isPaused {
+            habit.isPaused = false
+            habit.pausedSince = nil
+        } else {
+            habit.isPaused = true
+            habit.pausedSince = Date()
+            NotificationManager.shared.removeAllReminders(for: habit)
         }
     }
 }

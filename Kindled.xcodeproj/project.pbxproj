@@ -12,8 +12,20 @@
 		A01286342FAE159B00629E5A /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = A01286332FAE159B00629E5A /* RevenueCat */; };
 		A01286362FAE159B00629E5A /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = A01286352FAE159B00629E5A /* RevenueCatUI */; };
 		A01286A02FAFCC7600629E5A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A012869F2FAFCC7600629E5A /* FirebaseAnalytics */; };
-		A01286A42FAFCF9000629E5A /* Kindled/GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A01286A32FAFCF9000629E5A /* Kindled/GoogleService-Info.plist */; };
+		A046B5772FF0889600DD65C5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A07078942FA60446009298AF /* WidgetKit.framework */; };
+		A046B5782FF0889600DD65C5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A07078962FA60446009298AF /* SwiftUI.framework */; };
+		A046B5852FF0889600DD65C5 /* KindledWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A046B5762FF0889600DD65C5 /* KindledWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A046B5832FF0889600DD65C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A0A7F8C62FA54E3F00BCE594 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A046B5752FF0889600DD65C5;
+			remoteInfo = KindledWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A07078A92FA60447009298AF /* Embed Foundation Extensions */ = {
@@ -22,6 +34,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				A046B5852FF0889600DD65C5 /* KindledWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -29,7 +42,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A01286A32FAFCF9000629E5A /* Kindled/GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Kindled/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A046B5762FF0889600DD65C5 /* KindledWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = KindledWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A046B58B2FF0893800DD65C5 /* KindledWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KindledWidgetExtension.entitlements; sourceTree = "<group>"; };
 		A07078942FA60446009298AF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		A07078962FA60446009298AF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kindled.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,9 +57,24 @@
 			);
 			target = A0A7F8CD2FA54E3F00BCE594 /* Kindled */;
 		};
+		A046B5892FF0889600DD65C5 /* Exceptions for "KindledWidget" folder in "KindledWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A046B5752FF0889600DD65C5 /* KindledWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		A046B5792FF0889600DD65C5 /* KindledWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A046B5892FF0889600DD65C5 /* Exceptions for "KindledWidget" folder in "KindledWidgetExtension" target */,
+			);
+			path = KindledWidget;
+			sourceTree = "<group>";
+		};
 		A0A7F8D02FA54E3F00BCE594 /* Kindled */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -57,6 +86,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A046B5732FF0889600DD65C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A046B5782FF0889600DD65C5 /* SwiftUI.framework in Frameworks */,
+				A046B5772FF0889600DD65C5 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A0A7F8CB2FA54E3F00BCE594 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -84,10 +122,11 @@
 		A0A7F8C52FA54E3F00BCE594 = {
 			isa = PBXGroup;
 			children = (
+				A046B58B2FF0893800DD65C5 /* KindledWidgetExtension.entitlements */,
 				A0A7F8D02FA54E3F00BCE594 /* Kindled */,
+				A046B5792FF0889600DD65C5 /* KindledWidget */,
 				A07078932FA60446009298AF /* Frameworks */,
 				A0A7F8CF2FA54E3F00BCE594 /* Products */,
-				A01286A32FAFCF9000629E5A /* Kindled/GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				A0A7F8CE2FA54E3F00BCE594 /* Kindled.app */,
+				A046B5762FF0889600DD65C5 /* KindledWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,6 +142,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A046B5752FF0889600DD65C5 /* KindledWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A046B5862FF0889600DD65C5 /* Build configuration list for PBXNativeTarget "KindledWidgetExtension" */;
+			buildPhases = (
+				A046B5722FF0889600DD65C5 /* Sources */,
+				A046B5732FF0889600DD65C5 /* Frameworks */,
+				A046B5742FF0889600DD65C5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A046B5792FF0889600DD65C5 /* KindledWidget */,
+			);
+			name = KindledWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = KindledWidgetExtension;
+			productReference = A046B5762FF0889600DD65C5 /* KindledWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A0A7F8CD2FA54E3F00BCE594 /* Kindled */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0A7F8D92FA54E4100BCE594 /* Build configuration list for PBXNativeTarget "Kindled" */;
@@ -114,6 +176,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A046B5842FF0889600DD65C5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				A0A7F8D02FA54E3F00BCE594 /* Kindled */,
@@ -137,9 +200,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2640;
+				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
+					A046B5752FF0889600DD65C5 = {
+						CreatedOnToolsVersion = 26.6;
+					};
 					A0A7F8CD2FA54E3F00BCE594 = {
 						CreatedOnToolsVersion = 26.4.1;
 					};
@@ -167,22 +233,36 @@
 			projectRoot = "";
 			targets = (
 				A0A7F8CD2FA54E3F00BCE594 /* Kindled */,
+				A046B5752FF0889600DD65C5 /* KindledWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A046B5742FF0889600DD65C5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A0A7F8CC2FA54E3F00BCE594 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A01286A42FAFCF9000629E5A /* Kindled/GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A046B5722FF0889600DD65C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A0A7F8CA2FA54E3F00BCE594 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -192,7 +272,79 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		A046B5842FF0889600DD65C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A046B5752FF0889600DD65C5 /* KindledWidgetExtension */;
+			targetProxy = A046B5832FF0889600DD65C5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		A046B5872FF0889600DD65C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = KindledWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 74233Z9998;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KindledWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KindledWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled.KindledWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A046B5882FF0889600DD65C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = KindledWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 74233Z9998;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KindledWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KindledWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled.KindledWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		A0A7F8D72FA54E4100BCE594 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -320,6 +472,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Kindled/Kindled.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 74233Z9998;
@@ -337,7 +490,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -360,6 +513,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Kindled/Kindled.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 74233Z9998;
@@ -377,7 +531,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.8.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.luka-lta.kindled";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -397,6 +551,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A046B5862FF0889600DD65C5 /* Build configuration list for PBXNativeTarget "KindledWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A046B5872FF0889600DD65C5 /* Debug */,
+				A046B5882FF0889600DD65C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A0A7F8C92FA54E3F00BCE594 /* Build configuration list for PBXProject "Kindled" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
